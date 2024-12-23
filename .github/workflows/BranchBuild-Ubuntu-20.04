@@ -1,5 +1,5 @@
 # The name Github will display in the Action tab
-name: RunCmd
+name: BranchBuild-Ubuntu-20.04
 
 # define which events can cause the workflow to run.
 on: [workflow_dispatch]
