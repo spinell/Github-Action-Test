@@ -20,10 +20,12 @@ jobs:
           ls ${{ github.workspace }}
       - name: Update vcpkg
         run: vcpkg update
-      - name: Install vcpkg package
-        run: |
-          vcpkg install gtest
-          vcpkg install entt
-          vcpkg install lua
-          vcpkg install sdl2
+      - name: Install gtest
+        run: vcpkg install gtest
+      - name: Install entt
+        run: vcpkg install entt          
+      - name: Install sdl2
+        run: vcpkg install sdl2
+      - name: Install lua
+        run: vcpkg install lua
       - run: echo "This job's status is ${{ job.status }}."
