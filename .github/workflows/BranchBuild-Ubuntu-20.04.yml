@@ -37,5 +37,5 @@ jobs:
       - name: Install lua
         run: vcpkg install lua
       - name: Building ...
-        run: cmake -S . -B ./build
+        run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
       - run: echo "This job's status is ${{ job.status }}."
