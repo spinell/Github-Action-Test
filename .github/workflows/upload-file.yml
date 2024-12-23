@@ -1,0 +1,17 @@
+# The name Github will display in the Action tab
+name: upload-file
+
+# define which events can cause the workflow to run.
+on: [workflow_dispatch]
+
+jobs:
+  upload:
+    name: upload-file
+    runs-on: ubuntu-22.04
+    steps:
+    - run: mkdir -p path/to/artifact
+    - run: echo hello > path/to/artifact/world.txt
+    - uses: actions/upload-artifact@v4
+      with:
+        name: my-artifact
+        path: path/to/artifact/world.txt
