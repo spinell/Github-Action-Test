@@ -1,0 +1,25 @@
+# The name Github will display in the Action tab
+name: RunCmd
+
+# define which events can cause the workflow to run.
+on: [workflow_dispatch]
+
+# A workflow run is made up of one or more jobs, which run in parallel by default.
+jobs:
+  job1:
+    name: My first job
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "- The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "- This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "- The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - name: Install vcpkg package
+      - run: |
+          vcpkg install gtest
+          vcpkg install sdl2
+      - run: echo "This job's status is ${{ job.status }}."
