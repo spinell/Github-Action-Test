@@ -18,12 +18,12 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+      - name: Update vcpkg
+        run: vcpkg update
       - name: Install vcpkg package
         run: |
           vcpkg install gtest
-          sudo apt-get install autoconf
-          sudo apt-get install automake
-          sudo apt-get install libtool
-          sudo apt-get install pkg-config
-          sudo vcpkg install sdl2
+          vcpkg install entt
+          vcpkg install lua
+          vcpkg install sdl2
       - run: echo "This job's status is ${{ job.status }}."
