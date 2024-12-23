@@ -84,9 +84,7 @@ jobs:
       - name: Running tests ...
         run: ctest --test-dir ./build
       - run: echo "This job's status is ${{ job.status }}."
-
-
-      gcc13:
+  gcc13:
         name: Build-Test-GCC13
         runs-on: ubuntu-22.04
         env:
