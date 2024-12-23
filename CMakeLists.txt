@@ -15,6 +15,8 @@ message(STATUS "Found EnTT in ${EnTT_DIR}")
 
 find_package(lua   REQUIRED CONFIG)
 
+add_subdirectory(App)
+
 #target_link_libraries(main PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static> )
 # target_link_libraries(main PRIVATE GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main)
 #target_link_libraries(main PRIVATE EnTT::EnTT)
@@ -26,3 +28,5 @@ if(BUILD_TEST)
     enable_testing()
     add_subdirectory(tests)
 endif(BUILD_TEST)
+
+install(TARGETS App)

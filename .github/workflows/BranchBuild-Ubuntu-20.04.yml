@@ -45,6 +45,8 @@ jobs:
         run: cmake --build ./build
       - name: Running tests ...
         run: ctest --test-dir ./build
+      - name: Running cmake install ...
+        run: cmake --install --prefix ./install
       - run: echo "This job's status is ${{ job.status }}."
 
   gcc11:
@@ -86,6 +88,8 @@ jobs:
         run: cmake --build ./build
       - name: Running tests ...
         run: ctest --test-dir ./build
+      - name: Running cmake install ...
+        run: cmake --install --prefix ./install
       - run: echo "This job's status is ${{ job.status }}."
   gcc12:
         name: Build-Test-GCC12
@@ -126,4 +130,6 @@ jobs:
             run: cmake --build ./build
           - name: Running tests ...
             run: ctest --test-dir ./build
+          - name: Running cmake install ...
+            run: cmake --install --prefix ./install
           - run: echo "This job's status is ${{ job.status }}."
