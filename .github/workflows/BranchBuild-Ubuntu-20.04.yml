@@ -49,7 +49,7 @@ jobs:
         run: cmake --install ./build --prefix ./install
       - uses: actions/upload-artifact@v4
         with:
-          name: install
+          name: install-ubuntu-gcc-10
           path: ./install
       - run: echo "This job's status is ${{ job.status }}."
 
@@ -96,7 +96,7 @@ jobs:
         run: cmake --install ./build --prefix ./install
       - uses: actions/upload-artifact@v4
         with:
-          name: install
+              name: install-ubuntu-gcc-11
           path: ./install
       - run: echo "This job's status is ${{ job.status }}."
   gcc12:
@@ -142,6 +142,6 @@ jobs:
             run: cmake --install ./build --prefix ./install
           - uses: actions/upload-artifact@v4
             with:
-              name: install
+              name: install-ubuntu-gcc-12
               path: ./install
           - run: echo "This job's status is ${{ job.status }}."
