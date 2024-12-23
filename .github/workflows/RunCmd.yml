@@ -25,5 +25,6 @@ jobs:
           sudo apt-get install automake
           sudo apt-get install libtool
           sudo apt-get install pkg-config
+          sudo apt-get install perl-open
           vcpkg install sdl2
       - run: echo "This job's status is ${{ job.status }}."
