@@ -9,7 +9,7 @@ jobs:
   job1:
     name: My first job
     runs-on: ubuntu-22.04
-    env: 
+    env:
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
       - run: echo "- The job was automatically triggered by a ${{ github.event_name }} event."
@@ -31,9 +31,11 @@ jobs:
       - name: Install gtest
         run: vcpkg install gtest
       - name: Install entt
-        run: vcpkg install entt          
+        run: vcpkg install entt
       - name: Install sdl2
         run: vcpkg install sdl2
       - name: Install lua
         run: vcpkg install lua
+      - name: Building ...
+        run: cmake -S . -B ./build
       - run: echo "This job's status is ${{ job.status }}."
