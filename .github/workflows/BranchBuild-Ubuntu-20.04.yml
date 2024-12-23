@@ -47,6 +47,10 @@ jobs:
         run: ctest --test-dir ./build
       - name: Running cmake install ...
         run: cmake --install ./build --prefix ./install
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install
+          path: ./install
       - run: echo "This job's status is ${{ job.status }}."
 
   gcc11:
@@ -90,6 +94,10 @@ jobs:
         run: ctest --test-dir ./build
       - name: Running cmake install ...
         run: cmake --install ./build --prefix ./install
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install
+          path: ./install
       - run: echo "This job's status is ${{ job.status }}."
   gcc12:
         name: Build-Test-GCC12
@@ -132,4 +140,8 @@ jobs:
             run: ctest --test-dir ./build
           - name: Running cmake install ...
             run: cmake --install ./build --prefix ./install
+          - uses: actions/upload-artifact@v4
+            with:
+              name: install
+              path: ./install
           - run: echo "This job's status is ${{ job.status }}."
