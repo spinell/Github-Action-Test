@@ -21,5 +21,6 @@ jobs:
       - name: Install vcpkg package
         run: |
           vcpkg install gtest
+          apt-get install autoconf automake libtool pkg-config
           vcpkg install sdl2
       - run: echo "This job's status is ${{ job.status }}."
