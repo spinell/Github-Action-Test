@@ -40,7 +40,7 @@ jobs:
         run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
         env:
           CC: "gcc-10"
-          CXX: "gcc-10"
+          CXX: "g++-10"
       - name: Running cmake build ...
         run: cmake --build ./build
       - name: Running tests ...
@@ -50,7 +50,6 @@ jobs:
   gcc11:
     name: Build-Test-GCC11
     runs-on: ubuntu-22.04
-    if: false
     env:
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
@@ -82,7 +81,7 @@ jobs:
         run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
         env:
           CC: "gcc-11"
-          CXX: "gcc-11"
+          CXX: "g++-11"
       - name: Running cmake build ...
         run: cmake --build ./build
       - name: Running tests ...
@@ -91,7 +90,6 @@ jobs:
   gcc12:
         name: Build-Test-GCC12
         runs-on: ubuntu-22.04
-        if: false
         env:
             VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
         steps:
@@ -123,7 +121,7 @@ jobs:
             run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
             env:
               CC: "gcc-12"
-              CXX: "gcc-12"
+              CXX: "g++-12"
           - name: Running cmake build ...
             run: cmake --build ./build
           - name: Running tests ...
