@@ -1,5 +1,5 @@
 # The name Github will display in the Action tab
-name: RunCmd
+name: BranchBuild-Ubuntu-24.04
 
 # define which events can cause the workflow to run.
 on: [workflow_dispatch]
@@ -8,7 +8,7 @@ on: [workflow_dispatch]
 jobs:
   job1:
     name: My first job
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env: 
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
