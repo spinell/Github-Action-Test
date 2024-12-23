@@ -6,8 +6,8 @@ on: [workflow_dispatch]
 
 # A workflow run is made up of one or more jobs, which run in parallel by default.
 jobs:
-  job1:
-    name: My first job
+  gcc11:
+    name: Build-Test-GCC11
     runs-on: ubuntu-22.04
     env:
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
@@ -43,3 +43,86 @@ jobs:
       - name: Running tests ...
         run: ctest --test-dir ./build
       - run: echo "This job's status is ${{ job.status }}."
+
+  gcc12:
+    name: Build-Test-GCC12
+    runs-on: ubuntu-22.04
+    env:
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+    steps:
+      - run: echo "- The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "- This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "- The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - name: Export GitHub Actions cache environment variables
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+      - name: Update vcpkg
+        run: vcpkg update
+      - name: Install gtest
+        run: vcpkg install gtest
+      - name: Install entt
+        run: vcpkg install entt
+      - name: Install sdl2
+        run: vcpkg install sdl2
+      - name: Install lua
+        run: vcpkg install lua
+      - name: Running cmake configure ...
+        run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+        env:
+          CC: "gcc-12"
+          CXX: "gcc-12"
+      - name: Running cmake build ...
+        run: cmake --build ./build
+      - name: Running tests ...
+        run: ctest --test-dir ./build
+      - run: echo "This job's status is ${{ job.status }}."
+
+
+      gcc13:
+        name: Build-Test-GCC13
+        runs-on: ubuntu-22.04
+        env:
+            VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+        steps:
+          - run: echo "- The job was automatically triggered by a ${{ github.event_name }} event."
+          - run: echo "- This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          - run: echo "- The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+          - name: Check out repository code
+            uses: actions/checkout@v4
+          - name: List files in the repository
+            run: |
+              ls ${{ github.workspace }}
+          - name: Export GitHub Actions cache environment variables
+            uses: actions/github-script@v7
+            with:
+              script: |
+                core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+                core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+          - name: Update vcpkg
+            run: vcpkg update
+          - name: Install gtest
+            run: vcpkg install gtest
+          - name: Install entt
+            run: vcpkg install entt
+          - name: Install sdl2
+            run: vcpkg install sdl2
+          - name: Install lua
+            run: vcpkg install lua
+          - name: Running cmake configure ...
+            run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+            env:
+              CC: "gcc-13"
+              CXX: "gcc-13"
+          - name: Running cmake build ...
+            run: cmake --build ./build
+          - name: Running tests ...
+            run: ctest --test-dir ./build
+          - run: echo "This job's status is ${{ job.status }}."
