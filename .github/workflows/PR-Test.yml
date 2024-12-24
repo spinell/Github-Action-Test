@@ -87,7 +87,8 @@ jobs:
         run: vcpkg install lua
       # 
       - name: Running cmake configure ...
-        run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=%VCPKG_INSTALLATION_ROOT%/scripts/buildsystems/vcpkg.cmake
+        #run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=%VCPKG_INSTALLATION_ROOT%/scripts/buildsystems/vcpkg.cmake
+        run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake        
         env:
           CC: "cl.exe"
           CXX: "cl.exe"
