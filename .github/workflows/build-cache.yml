@@ -50,8 +50,7 @@ jobs:
         run: sudo apt-get install libltdl-dev
       - if: ${{ startsWith(matrix.os, 'macos') }}
         run: |
-            which cmake
-            which make
+            which cmake || which make || which ninja
 
 
       # Clone the repo
