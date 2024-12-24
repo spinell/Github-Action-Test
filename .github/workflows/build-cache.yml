@@ -51,7 +51,7 @@ jobs:
       - if: ${{ startsWith(matrix.os, 'macos') }}
         run: |
             which cmake
-            which ninja
+            which make
 
 
       # Clone the repo
