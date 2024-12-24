@@ -96,6 +96,8 @@ jobs:
       - name: Running cmake build ...
         run: cmake --build ./build
       - name: Running tests ...
-        run: ctest --test-dir ./build -C "${{ matrix.buildConfig }}"
+        run: |
+          dir ./build
+          ctest --test-dir ./build --build-config ${{ matrix.buildConfig }}
       - name: Running cmake install ...
         run: cmake --install ./build --prefix ./install
