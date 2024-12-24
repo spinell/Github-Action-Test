@@ -1,0 +1,32 @@
+# The name of the workflow.
+# GitHub displays the names of your workflows under your repository's "Actions" tab.
+name: vcpkg-build-cache
+
+# The name for workflow runs generated from the workflow.
+# GitHub displays the workflow run name in the list of workflow runs on your repository's "Actions" tab.
+run-name: ""
+
+# run whenever there is a pull_request event for a pull request targeting branch main:
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ubuntu:
+    name: Ubuntu-22.04-${{ matrix.buildConfig }}-gcc-${{ matrix.gcc }}
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        buildConfig: [Debug, Release, RelWithDebInfo]
+        gcc: [10, 11, 12]
+    env:
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+    steps:
+      # Setup vcpkg: ensures vcpkg is downloaded and built.
+      # Since vcpkg.json is being used later on to install the packages
+      # when `run-cmake` runs, no packages are installed at this time
+      # (and vcpkg does not run).
+      - name: Setup anew (or from cache) vcpkg (and does not build any package)
+        uses: lukka/run-vcpkg@v11
+        with:
+          #vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+          runVcpkgInstall: true
