@@ -1,5 +1,5 @@
-# The name of the workflow. 
-# GitHub displays the names of your workflows under your repository's "Actions" tab. 
+# The name of the workflow.
+# GitHub displays the names of your workflows under your repository's "Actions" tab.
 name: PR-Test
 
 # The name for workflow runs generated from the workflow.
@@ -37,14 +37,14 @@ jobs:
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
       # Install dependencies
       - name: Install gtest
-        run: vcpkg install gtest
+        run: vcpkg install --classic gtest
       - name: Install entt
-        run: vcpkg install entt
+        run: vcpkg install --classic entt
       - name: Install sdl2
-        run: vcpkg install sdl2
+        run: vcpkg install --classic sdl2
       - name: Install lua
-        run: vcpkg install lua
-      # 
+        run: vcpkg install --classic lua
+      #
       - name: Running cmake configure ...
         run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
         env:
@@ -82,14 +82,14 @@ jobs:
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
       # Install dependencies
       - name: Install gtest
-        run: vcpkg install gtest
+        run: vcpkg install --classic gtest
       - name: Install entt
-        run: vcpkg install entt
+        run: vcpkg install --classic entt
       - name: Install sdl2
-        run: vcpkg install sdl2
+        run: vcpkg install --classic sdl2
       - name: Install lua
-        run: vcpkg install lua
-      # 
+        run: vcpkg install --classic lua
+      #
       - name: Running cmake configure ...
         run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
         shell: bash
