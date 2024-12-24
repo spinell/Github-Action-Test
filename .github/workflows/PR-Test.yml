@@ -6,7 +6,11 @@ name: PR-Test
 # GitHub displays the workflow run name in the list of workflow runs on your repository's "Actions" tab.
 run-name: ""
 
-on: pull_request
+# run whenever there is a pull_request event for a pull request targeting branch main:
+on:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build-ubuntu-2204:
