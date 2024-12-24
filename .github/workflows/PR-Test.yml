@@ -10,7 +10,7 @@ on: pull_request
 
 jobs:
   example_matrix:
-    name: PRBuild
+    name: PR-Build-ubuntu-22.04
     runs-on: ubuntu-22.04
     strategy:
       matrix:
