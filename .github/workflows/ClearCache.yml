@@ -1,5 +1,6 @@
 # Clear the GitHub action cache
 # from https://stackoverflow.com/questions/63521430/clear-cache-in-github-actions
+# https://github.com/roboflow/supervision/blob/develop/.github/workflows/clear-cache.yml
 name: Clear cache
 
 on:
