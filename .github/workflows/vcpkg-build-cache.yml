@@ -9,7 +9,9 @@ run-name: ""
 # run whenever there is a pull_request event for a pull request targeting branch main:
 on:
   workflow_dispatch:
-
+  pull_request:
+    branches:
+      - main
 jobs:
   build-ubuntu:
     name: Ubuntu-22.04-${{ matrix.buildConfig }}-gcc-${{ matrix.gcc }}
@@ -21,12 +23,45 @@ jobs:
     env:
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
+      # Clone the repo
+      - name: Cloning git repo
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          # This is useful to avoid https://github.com/microsoft/vcpkg/issues/25349
+          # which is caused by missing Git history on the vcpkg submodule which ports
+          # try to access.
+          # Do not use if not needed, since it slows down the checkout of sources.
+          fetch-depth: 0
+
       # Setup vcpkg: ensures vcpkg is downloaded and built.
       # Since vcpkg.json is being used later on to install the packages
       # when `run-cmake` runs, no packages are installed at this time
       # (and vcpkg does not run).
-      - name: Setup anew (or from cache) vcpkg (and does not build any package)
+      - name: Setup a new (or from cache) vcpkg (and does not build any package)
         uses: lukka/run-vcpkg@v11
+        id: runvcpkg
+        env:
+          VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
         with:
-          #vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+          #vcpkgJsonGlob: '${{ matrix.vcpkgCommitId }}'
           runVcpkgInstall: true
+
+      - name: Prints output of run-vcpkg's action.
+        run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
+
+      - name: Running cmake configure ...
+        run: |
+          cmake -S . -B ./build \
+            -DCMAKE_MODULE_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}  \
+            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
+        env:
+          CC: "gcc-${{ matrix.gcc }}"
+          CXX: "g++-${{ matrix.gcc }}"
+          CMAKE_BUILD_TYPE: "${{ matrix.buildConfig }}"
+      - name: Running cmake build ...
+        run: cmake --build ./build
+      - name: Running tests ...
+        run: ctest --test-dir ./build
+      - name: Running cmake install ...
+        run: cmake --install ./build --prefix ./install

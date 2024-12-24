@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.27)
 project(TestGitHubAction)
 
+message(STATUS "CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
+message(STATUS "CMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}")
+message(STATUS "CMAKE_PRIFIX_PATH=${CMAKE_MODULE_PATH}")
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS Off)
@@ -13,7 +17,7 @@ message(STATUS "Found SDL2 in ${SDL2_DIR}")
 find_package(EnTT 3.14.0  EXACT REQUIRED CONFIG)
 message(STATUS "Found EnTT in ${EnTT_DIR}")
 
-find_package(lua   REQUIRED CONFIG)
+find_package(unofficial-lua REQUIRED CONFIG)
 
 add_subdirectory(App)
 
