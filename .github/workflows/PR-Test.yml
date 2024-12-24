@@ -10,7 +10,7 @@ on: pull_request
 
 jobs:
   example_matrix:
-    name: PR-Build-ubuntu-22.04
+    name: Build-ubuntu-22.04-${{ matrix.buildConfig }}-gcc-${{ matrix.gcc }}
     runs-on: ubuntu-22.04
     strategy:
       matrix:
