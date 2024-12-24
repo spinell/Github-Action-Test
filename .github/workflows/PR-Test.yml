@@ -9,7 +9,7 @@ run-name: ""
 on: pull_request
 
 jobs:
-  build-ubuntu-2204:
+  build-ubuntu:
     name: Ubuntu-22.04-${{ matrix.buildConfig }}-gcc-${{ matrix.gcc }}
     runs-on: ubuntu-22.04
     strategy:
@@ -46,6 +46,50 @@ jobs:
         env:
           CC: "gcc-${{ matrix.gcc }}"
           CXX: "g++-${{ matrix.gcc }}"
+          BUILD_TYPE: "${{ matrix.buildConfig }}"
+      - name: Running cmake build ...
+        run: cmake --build ./build
+      - name: Running tests ...
+        run: ctest --test-dir ./build
+      - name: Running cmake install ...
+        run: cmake --install ./build --prefix ./install
+
+  build-windows:
+    name: Ubuntu-2022-${{ matrix.buildConfig }}
+    runs-on: Windows-2022
+    strategy:
+      matrix:
+        buildConfig: [Debug, Release, RelWithDebInfo]
+    env:
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+    steps:
+      - run: echo "- The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "- This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "- The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      # Install dependencies
+      - name: Export GitHub Actions cache environment variables
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+      # Install dependencies
+      - name: Install gtest
+        run: vcpkg install gtest
+      - name: Install entt
+        run: vcpkg install entt
+      - name: Install sdl2
+        run: vcpkg install sdl2
+      - name: Install lua
+        run: vcpkg install lua
+      # 
+      - name: Running cmake configure ...
+        run: cmake -S . -B ./build -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+        env:
+          CC: "cl.exe"
+          CXX: "cl.exe"
           BUILD_TYPE: "${{ matrix.buildConfig }}"
       - name: Running cmake build ...
         run: cmake --build ./build
