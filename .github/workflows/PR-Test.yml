@@ -1,5 +1,10 @@
+# The name of the workflow. 
+# GitHub displays the names of your workflows under your repository's "Actions" tab. 
 name: PR-Test
-run-name: xxx
+
+# The name for workflow runs generated from the workflow.
+# GitHub displays the workflow run name in the list of workflow runs on your repository's "Actions" tab.
+run-name: ""
 
 on: pull_request
 
@@ -9,6 +14,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
+        buildConfig: [Debug, Release, RelWithDebInfo]
         gcc: [10, 11, 12]
     env:
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
@@ -40,6 +46,7 @@ jobs:
         env:
           CC: "gcc-${{ matrix.gcc }}"
           CXX: "g++-${{ matrix.gcc }}"
+          BUILD_TYPE: "${{ matrix.buildConfig }}"
       - name: Running cmake build ...
         run: cmake --build ./build
       - name: Running tests ...
