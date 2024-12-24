@@ -35,6 +35,8 @@ jobs:
         matrix:
             os: [ubuntu-20.04, ubuntu-24.04, windows-2022, windows-2025, macos-13, macos-14, macos-15]
             buildConfig: [Debug, Release, RelWithDebInfo]
+        # if one job in the matrix fail, don't cancel other jobs inthe matrix
+        fail-fast: false
     steps:
       # Clone the repo
       - name: Checkout repository
