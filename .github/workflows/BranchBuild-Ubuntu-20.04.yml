@@ -96,7 +96,7 @@ jobs:
         run: cmake --install ./build --prefix ./install
       - uses: actions/upload-artifact@v4
         with:
-              name: install-ubuntu-gcc-11
+          name: install-ubuntu-gcc-11
           path: ./install
       - run: echo "This job's status is ${{ job.status }}."
   gcc12:
