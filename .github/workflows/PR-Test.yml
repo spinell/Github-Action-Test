@@ -55,7 +55,7 @@ jobs:
         run: cmake --install ./build --prefix ./install
 
   build-windows:
-    name: Ubuntu-2022-${{ matrix.buildConfig }}
+    name: Windows-2022-${{ matrix.buildConfig }}
     runs-on: Windows-2022
     strategy:
       matrix:
@@ -63,6 +63,7 @@ jobs:
     env:
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
+      - run: env
       - run: echo "- The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "- This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "- The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
