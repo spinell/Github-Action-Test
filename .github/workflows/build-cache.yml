@@ -27,6 +27,11 @@ on:
     branches:
       - "main"
 
+# Ubuntu 24.04 Debug          : configure.ac:60: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE
+# Ubuntu 24.04 Release        : configure.ac:60: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE
+# Ubuntu 24.04 RelWithDebInfo : configure.ac:60: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE
+# MacOS 14 Debug              : CMake Error: CMake was unable to find a build program corresponding to "Ninja".
+# MacOS 15 Debug              : CMake Error: CMake was unable to find a build program corresponding to "Ninja".
 jobs:
   build-cache:
     name: Build Cache
@@ -38,6 +43,10 @@ jobs:
         # if one job in the matrix fail, don't cancel other jobs inthe matrix
         fail-fast: false
     steps:
+      - if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        name: Install libltdl-dev
+        run: sudo apt-get install libltdl-dev
+
       # Clone the repo
       - name: Checkout repository
         uses: actions/checkout@v4
