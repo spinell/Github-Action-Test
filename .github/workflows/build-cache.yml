@@ -45,7 +45,14 @@ jobs:
     steps:
       - if: ${{ startsWith(matrix.os, 'ubuntu') }}
         name: Install libltdl-dev
+        # required for SDL2 dependency
+        # Fix configure.ac:60: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE
         run: sudo apt-get install libltdl-dev
+      - if: ${{ startsWith(matrix.os, 'macos') }}
+        run: |
+            which cmake
+            which ninja
+
 
       # Clone the repo
       - name: Checkout repository
