@@ -1,0 +1,59 @@
+############################################################
+#   Update the cache on the main branch on push event
+#   Support also manual execution
+############################################################
+name: update-cache
+
+on:
+  workflow_dispatch:
+    inputs:
+        chosen-os:
+          description: 'Environment to run tests against'
+          required: true
+          type: choice
+          options:
+          - Ubuntu-20.04
+          - Ubuntu-24.04
+          - Windows-2022
+          - Windows-2025
+          - macOS-13
+          - macOS-14
+          - macOS-15
+        environment:
+          description: 'Environment to run tests against'
+          type: environment
+          required: true
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build-cache:
+    name: Build Cache
+    runs-on: ${{ matrix.os }}
+    strategy:
+        matrix:
+            os: [ubuntu-20.04, ubuntu-24.04, windows-2022, windows-2025, macos-13, macos-14, macos-15]
+            buildConfig: [Debug, Release, RelWithDebInfo]
+    steps:
+      # Clone the repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+            submodules: true
+            fetch-depth: 0
+
+      # Setup vcpkg: ensures vcpkg is downloaded and built.
+      # This will also run vcpkg
+      - name: Setup a new (or from cache) vcpkg (and does not build any package)
+        uses: lukka/run-vcpkg@v11
+        id: runvcpkg
+        env:
+          VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
+        with:
+          runVcpkgInstall: true
+
+      - name: Prints output of run-vcpkg's action.
+        run: |
+            echo root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}'
+            echo triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}'
