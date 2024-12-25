@@ -1,0 +1,101 @@
+# The name of the workflow.
+# GitHub displays the names of your workflows under your repository's "Actions" tab.
+name: Build
+
+# The name for workflow runs generated from the workflow.
+# GitHub displays the workflow run name in the list of workflow runs on your repository's "Actions" tab.
+run-name: "[Build] ${{ github.ref }}"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    name: ${{ matrix.os }}-${{ matrix.cc }}-${{ matrix.buildConfig }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-22.04, ubuntu-24.04]
+        buildConfig: [Debug, Release, RelWithDebInfo]
+        include:
+          - os: ubuntu-22.04
+            cc:  gcc-10
+            cxx: g++-10
+          - os: ubuntu-22.04
+            cc:  gcc-11
+            cxx: g++-11
+          - os: ubuntu-22.04
+            cc:  gcc-12
+            cxx: g++-12
+          - os: ubuntu-22.04
+            cc:  clang-13
+            cxx: clang++-13
+          - os: ubuntu-22.04
+            cc:  clang-14
+            cxx: clang++-14
+          - os: ubuntu-22.04
+            cc:  clang-15
+            cxx: clang++-15
+          - os: ubuntu-24.04
+            cc:  gcc-12
+            cxx: g++-12
+          - os: ubuntu-24.04
+            cc:  gcc-13
+            cxx: g++-13
+          - os: ubuntu-24.04
+            cc:  gcc-14
+            cxx: g++-14
+          - os: ubuntu-24.04
+            cc:  clang-15
+            cxx: clang++-15
+          - os: ubuntu-24.04
+            cc:  clang-16
+            cxx: clang++-16
+          - os: ubuntu-24.04
+            cc:  clang-18
+            cxx: clang++-18
+    env:
+      VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+    steps:
+      - name: Install libltdl-dev
+        run: sudo apt-get install libltdl-dev
+      - run: sudo apt-get install ninja-build
+
+      # Clone the repo
+      - name: Cloning git repo
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      # Setup vcpkg: ensures vcpkg is downloaded and built.
+      # Since vcpkg.json is being used later on to install the packages
+      # when `run-cmake` runs, no packages are installed at this time
+      # (and vcpkg does not run).
+      - name: Setup a new (or from cache) vcpkg (and does not build any package)
+        uses: lukka/run-vcpkg@v11
+        id: runvcpkg
+        env:
+          VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
+        with:
+          runVcpkgInstall: true
+
+      - name: Running cmake configure ...
+        env:
+          CC: "${{ matrix.cc }}"
+          CXX: "${{ matrix.cxx }}"
+          CMAKE_GENERATOR: "Ninja"
+          CMAKE_BUILD_TYPE: "${{ matrix.buildConfig }}"
+        run: |
+          cmake -S . -B ./build \
+            -DCMAKE_MODULE_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}  \
+            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
+
+      - name: Running cmake build ...
+        run: cmake --build ./build
+
+      - name: Running tests ...
+        run: ctest --test-dir ./build
+
+      - name: Running cmake install ...
+        run: cmake --install ./build --prefix ./install
