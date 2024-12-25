@@ -49,6 +49,7 @@ jobs:
 
       - uses: seanmiddleditch/gha-setup-ninja@master
       - run : which ninja
+      - run : ninja --version
 
       # Clone the repo
       - uses: actions/checkout@v4
@@ -77,6 +78,8 @@ jobs:
       - name: Running cmake configure ...
         shell: bash
         run: |
+          which ninja
+          ninja --version
           base='${{ github.workspace }}'
           base=""${base//\\//}""
           cmake -S . -B ./build \
