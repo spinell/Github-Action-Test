@@ -37,7 +37,28 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
-            os: [ubuntu-22.04, ubuntu-24.04, windows-2022, macos-13, macos-14, macos-15]
+          os: [ubuntu-22.04, ubuntu-24.04, windows-2022, macos-13, macos-14, macos-15]
+          include:
+            - os: ubuntu-22.04
+              cc:  gcc
+              cxx: g++
+            - os: ubuntu-24.04
+              cc:  gcc
+              cxx: g++
+            - os: windows-2022
+              cc:  cl.exe
+              cxx: cl.exe
+            - os: macos-13
+              cc:  clang
+              cxx: clang++
+            - os: macos-14
+              cc:  clang
+              cxx: clang++
+            - os: macos-15
+              cc:  clang
+              cxx: clang++
+
+
         # if one job in the matrix fail, don't cancel other jobs inthe matrix
         fail-fast: false
     steps:
@@ -95,6 +116,9 @@ jobs:
         run: |
           base='${{ github.workspace }}'
           base=""${base//\\//}""
+
+          export CC=${{ matrix.cc }}
+          export CXX=${{ matrix.cxx }}
           cmake -S . -B ./build \
           -G Ninja \
           -DCMAKE_MODULE_PATH=$base/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }} \
