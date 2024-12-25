@@ -18,7 +18,7 @@
 # See : https://medium.com/@everton.spader/how-to-cache-package-dependencies-between-branches-with-github-actions-e6a19f33783a
 #
 ############################################################
-name: update-cache
+name: update-main-cache
 
 on:
   workflow_dispatch:
