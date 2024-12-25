@@ -5,6 +5,7 @@
 # FIXME: Look like it can only delete 30 cache per run ....
 #
 name: Clear cache
+run-name: Clear cache for ${{ github.ref }}
 
 on:
   workflow_dispatch:
