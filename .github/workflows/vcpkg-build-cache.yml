@@ -44,7 +44,6 @@ jobs:
         env:
           VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
         with:
-          #vcpkgJsonGlob: '${{ matrix.vcpkgCommitId }}'
           runVcpkgInstall: true
 
       - name: Prints output of run-vcpkg's action.
