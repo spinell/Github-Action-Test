@@ -86,14 +86,13 @@ jobs:
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
 
       - name: Running cmake configure ...
-        env:
-          a: ${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
-        run: |
-          cmake -S . -B ./build -DCMAKE_MODULE_PATH=$a -DCMAKE_PREFIX_PATH=$a
+        run: cmake -S . -B ./build -DCMAKE_MODULE_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }} -DCMAKE_PREFIX_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
 
       - name: Running cmake build ...
         run: cmake --build ./build
+
       - name: Running tests ...
         run: ctest --test-dir ./build
+
       - name: Running cmake install ...
         run: cmake --install ./build --prefix ./install
