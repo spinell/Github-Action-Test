@@ -47,10 +47,6 @@ jobs:
         # Fix configure.ac:60: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE
         run: sudo apt-get install libltdl-dev
 
-      - uses: seanmiddleditch/gha-setup-ninja@master
-      - run : which ninja
-      - run : ninja --version
-
       # Clone the repo
       - uses: actions/checkout@v4
         with:
@@ -66,6 +62,10 @@ jobs:
           VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
         with:
           runVcpkgInstall: true
+
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - run : which ninja
+      - run : ninja --version
 
       - name: Prints output of run-vcpkg's action.
         run: |
