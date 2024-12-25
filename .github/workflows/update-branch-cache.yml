@@ -76,6 +76,7 @@ jobs:
       - name: Running cmake configure ...
         shell: bash
         run: |
+          echo $PATH
           base='${{ github.workspace }}'
           base=""${base//\\//}""
           cmake -S . -B ./build \
