@@ -6,20 +6,6 @@ name: update-cache
 
 on:
   workflow_dispatch:
-    inputs:
-        chosen-os:
-          description: 'Environment to run tests against'
-          required: true
-          type: choice
-          options:
-          - Ubuntu-20.04
-          - Ubuntu-24.04
-          - Windows-2022
-          - Windows-2025
-          - macOS-13
-          - macOS-14
-          - macOS-15
-
   push:
     branches:
       - "main"
