@@ -82,6 +82,7 @@ jobs:
         run : which ninja
 
       - name: Running cmake configure ...
+        shell: bash
         run: |
           base='${{ github.workspace }}'
           base=""${base//\\//}""
