@@ -1,6 +1,22 @@
 ############################################################
-#   Update the cache on the main branch on push event
-#   Support also manual execution
+# Update the cache on the main branch on push event
+# Support also manual execution
+# The cache will be created for release and debug.
+#
+# The Github action cache is per branch but a branch can access cache for
+# it's branch, it's base branch  or the main branche.
+#
+# Workflow runs cannot restore caches created for child branches or sibling branches.
+#
+# This workflow make sure to also have a valid cache on the main branch so
+# others branch can restore this cache.
+#
+# * Executing this workflow cancel running execution of this workflow.
+#
+# See : https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows
+# See : https://stackoverflow.com/questions/69365200/github-actions-how-to-cache-dependencies-between-workflow-runs-of-different-bra
+# See : https://medium.com/@everton.spader/how-to-cache-package-dependencies-between-branches-with-github-actions-e6a19f33783a
+#
 ############################################################
 name: update-cache
 
@@ -10,6 +26,10 @@ on:
     branches:
       - "main"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-cache:
     name: Build Cache
@@ -17,7 +37,6 @@ jobs:
     strategy:
         matrix:
             os: [ubuntu-20.04, ubuntu-24.04, windows-2022, windows-2025, macos-13, macos-14, macos-15]
-            buildConfig: [Debug, Release]
         # if one job in the matrix fail, don't cancel other jobs inthe matrix
         fail-fast: false
     steps:
