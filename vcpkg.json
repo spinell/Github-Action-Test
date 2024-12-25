@@ -3,6 +3,7 @@
     "gtest",
     "sdl2",
     "lua",
-    "entt"
+    "entt",
+    "spdlog"
   ]
 }

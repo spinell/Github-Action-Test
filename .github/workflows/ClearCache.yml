@@ -5,7 +5,7 @@
 # FIXME: Look like it can only delete 30 cache per run ....
 #
 name: Clear cache
-run-name: Clear cache for ${{ github.ref }}
+run-name: "[Clear cache] ${{ github.ref }}"
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            console.log("Starting cleanup cache for branch ${context.ref}")
+            console.log(`Starting cleanup cache for branch ${context.ref}`)
             let deletedCount = 0
             let hasNextPage = true
 
