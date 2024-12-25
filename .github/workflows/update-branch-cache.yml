@@ -19,6 +19,7 @@
 #
 ############################################################
 name: update-main-cache
+run-name: "[Update cache] ${{ github.ref }}"
 
 on:
   workflow_dispatch:
