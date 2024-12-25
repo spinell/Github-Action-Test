@@ -75,10 +75,14 @@ jobs:
       - name: Prints output of run-vcpkg's action.
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
 
+      - run : which ninja
+      - run : ninja --version
+
+      - name: which ninja
+        run : which ninja
+
       - name: Running cmake configure ...
         run: |
-          which ninja
-          ninja --version
           base='${{ github.workspace }}'
           base=""${base//\\//}""
           cmake -S . -B ./build \
