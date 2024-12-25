@@ -90,7 +90,6 @@ jobs:
           a: ${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
         run: |
           cmake -S . -B ./build -DCMAKE_MODULE_PATH=$a -DCMAKE_PREFIX_PATH=$a
-        shell: bash
 
       - name: Running cmake build ...
         run: cmake --build ./build
