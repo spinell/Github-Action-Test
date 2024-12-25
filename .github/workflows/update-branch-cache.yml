@@ -76,8 +76,6 @@ jobs:
       - name: Running cmake configure ...
         shell: bash
         run: |
-          echo $PATH
-          ls -la ${GITHUB_WORKSPACE}/ninja-build
           base='${{ github.workspace }}'
           base=""${base//\\//}""
           cmake -S . -B ./build \
