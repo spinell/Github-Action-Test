@@ -18,7 +18,7 @@
 # See : https://medium.com/@everton.spader/how-to-cache-package-dependencies-between-branches-with-github-actions-e6a19f33783a
 #
 ############################################################
-name: update-main-cache
+name: update-branch-cache
 run-name: "[Update cache] ${{ github.ref }}"
 
 on:
