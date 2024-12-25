@@ -42,6 +42,16 @@ jobs:
               compiler: { cc: clang, cxx: clang++, version: 17}
             - os : ubuntu-22.04
               compiler: { cc: clang, cxx: clang++, version: 18}
+            - os : ubuntu-24.04
+              compiler: { cc: gcc, cxx: g++, version: 10}
+            - os : ubuntu-24.04
+              compiler: { cc: gcc, cxx: g++, version: 11}
+            - os : ubuntu-24.04
+              compiler: { cc: clang, cxx: clang++, version: 13}
+            - os : ubuntu-24.04
+              compiler: { cc: clang, cxx: clang++, version: 14}
+            - os : ubuntu-24.04
+              compiler: { cc: clang, cxx: clang++, version: 15}
     env:
       VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
