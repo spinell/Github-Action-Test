@@ -4,7 +4,7 @@ name: vcpkg-build-cache
 
 # The name for workflow runs generated from the workflow.
 # GitHub displays the workflow run name in the list of workflow runs on your repository's "Actions" tab.
-run-name: ""
+run-name: "[vcpkg-build-cache] ${{ github.ref }}"
 
 # run whenever there is a pull_request event for a pull request targeting branch main:
 on:
