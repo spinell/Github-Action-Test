@@ -48,6 +48,7 @@ jobs:
         # required for SDL2 dependency
         # Fix configure.ac:60: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE
         run: sudo apt-get install libltdl-dev
+
       - if: ${{ startsWith(matrix.os, 'macos') }}
         name: Installing ninja
         uses: seanmiddleditch/gha-setup-ninja@master
@@ -61,6 +62,16 @@ jobs:
         with:
             submodules: true
             fetch-depth: 0
+
+      - run: |
+            mkdir build
+            cd build
+            cmake -G Ninja cmake ..
+
+      - run: |
+            mkdir build2
+            cd build2
+            cmake ..
 
       # Setup vcpkg: ensures vcpkg is downloaded and built.
       # This will also run vcpkg
