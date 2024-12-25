@@ -51,9 +51,12 @@ jobs:
 
       - if: ${{ startsWith(matrix.os, 'macos') }}
         name: Installing ninja
-        uses: seanmiddleditch/gha-setup-ninja@master
-        with:
-            version: 1.11.1
+        run: |
+            brew install ninja
+            ninja --version
+        #uses: seanmiddleditch/gha-setup-ninja@master
+        #with:
+        #    version: 1.11.1
 
 
       # Clone the repo
@@ -62,11 +65,6 @@ jobs:
         with:
             submodules: true
             fetch-depth: 0
-
-      - run: |
-            mkdir build2
-            cd build2
-            cmake ..
 
       # Setup vcpkg: ensures vcpkg is downloaded and built.
       # This will also run vcpkg
