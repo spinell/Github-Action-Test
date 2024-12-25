@@ -14,7 +14,7 @@ on:
       - main
 jobs:
   build-ubuntu:
-    name: Ubuntu-22.04-${{ matrix.buildConfig }}-gcc-${{ matrix.gcc }}
+    name: Ubuntu-22.04gcc-${{ matrix.gcc }}-${{ matrix.buildConfig }}
     runs-on: ubuntu-22.04
     strategy:
       matrix:
