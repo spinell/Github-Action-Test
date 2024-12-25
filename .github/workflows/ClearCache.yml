@@ -20,8 +20,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            console.log("Starting cleanup cache for branch ${cache.ref}")
+            console.log("Starting cleanup cache for branch ${context.ref}")
             let deletedCount = 0
+            let hasNextPage = true
 
             do {
               // Get of array of cache object
@@ -32,6 +33,8 @@ jobs:
                 per_page: 100,
                 ref: context.ref
               })
+
+              hasNextPage = caches.length > 100;
 
               for (const cache of caches.data.actions_caches) {
                 console.log(`Deleting cache: ${cache.key} for ${cache.ref} (${cache.size_in_bytes} bytes)`)
@@ -47,6 +50,6 @@ jobs:
                   console.error(`Failed to delete cache ${cache.key}: ${error.message}`)
                 }
               }
-            } while(caches.length > 0)
+            } while(hasNextPage)
 
             console.log(`Cache cleanup completed. Deleted ${deletedCount} caches.`)
