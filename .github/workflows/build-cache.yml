@@ -19,19 +19,11 @@ on:
           - macOS-13
           - macOS-14
           - macOS-15
-        environment:
-          description: 'Environment to run tests against'
-          type: environment
-          required: true
+
   push:
     branches:
       - "main"
 
-# Ubuntu 24.04 Debug          : configure.ac:60: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE
-# Ubuntu 24.04 Release        : configure.ac:60: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE
-# Ubuntu 24.04 RelWithDebInfo : configure.ac:60: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE
-# MacOS 14 Debug              : CMake Error: CMake was unable to find a build program corresponding to "Ninja".
-# MacOS 15 Debug              : CMake Error: CMake was unable to find a build program corresponding to "Ninja".
 jobs:
   build-cache:
     name: Build Cache
@@ -39,7 +31,7 @@ jobs:
     strategy:
         matrix:
             os: [ubuntu-20.04, ubuntu-24.04, windows-2022, windows-2025, macos-13, macos-14, macos-15]
-            buildConfig: [Debug, Release, RelWithDebInfo]
+            buildConfig: [Debug, Release]
         # if one job in the matrix fail, don't cancel other jobs inthe matrix
         fail-fast: false
     steps:
@@ -50,6 +42,9 @@ jobs:
         run: sudo apt-get install libltdl-dev
 
       - if: ${{ startsWith(matrix.os, 'macos') }}
+        # Osx does not have Ninja installed.
+        # CMake should used make but vcpkg fail to build on macos-14 and macos-15
+        # beacause cmake canèt find Ninja....
         name: Installing ninja
         run: |
             brew install ninja
