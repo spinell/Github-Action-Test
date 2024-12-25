@@ -64,11 +64,6 @@ jobs:
             fetch-depth: 0
 
       - run: |
-            mkdir build
-            cd build
-            cmake -G Ninja cmake ..
-
-      - run: |
             mkdir build2
             cd build2
             cmake ..
