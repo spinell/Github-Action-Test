@@ -38,26 +38,6 @@ jobs:
     strategy:
         matrix:
           os: [ubuntu-22.04, ubuntu-24.04, windows-2022, macos-13, macos-14, macos-15]
-          include:
-            - os: ubuntu-22.04
-              cc:  gcc
-              cxx: g++
-            - os: ubuntu-24.04
-              cc:  gcc
-              cxx: g++
-            - os: windows-2022
-              cc:  cl.exe
-              cxx: cl.exe
-            - os: macos-13
-              cc:  clang
-              cxx: clang++
-            - os: macos-14
-              cc:  clang
-              cxx: clang++
-            - os: macos-15
-              cc:  clang
-              cxx: clang++
-
 
         # if one job in the matrix fail, don't cancel other jobs inthe matrix
         fail-fast: false
@@ -74,14 +54,18 @@ jobs:
             submodules: true
             fetch-depth: 0
 
-      - if: ${{ startsWith(matrix.os, 'macos') }}
-        # Osx does not have Ninja installed.
-        # CMake should used make but vcpkg fail to build on macos-14 and macos-15
-        # beacause cmake canèt find Ninja....
-        name: Installing ninja
-        run: |
-            brew install ninja
-            ninja --version
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - run : which ninja
+      - run : ninja --version
+
+#      - if: ${{ startsWith(matrix.os, 'macos') }}
+#        # Osx does not have Ninja installed.
+#        # CMake should used make but vcpkg fail to build on macos-14 and macos-15
+#        # beacause cmake canèt find Ninja....
+#        name: Installing ninja
+#        run: |
+#            brew install ninja
+#            ninja --version
 
       # Setup vcpkg: ensures vcpkg is downloaded and built.
       # This will also run vcpkg
@@ -93,42 +77,7 @@ jobs:
         with:
           runVcpkgInstall: true
 
-      - uses: seanmiddleditch/gha-setup-ninja@master
-      - run : which ninja
-      - run : ninja --version
-
       - name: Prints output of run-vcpkg's action.
         run: |
             echo root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}'
             echo triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}'
-
-      - name: Prints output of run-vcpkg's action.
-        run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
-
-      - run : which ninja
-      - run : ninja --version
-
-      - name: which ninja
-        run : which ninja
-
-      - name: Running cmake configure ...
-        shell: bash
-        run: |
-          base='${{ github.workspace }}'
-          base=""${base//\\//}""
-
-          export CC=${{ matrix.cc }}
-          export CXX=${{ matrix.cxx }}
-          cmake -S . -B ./build \
-          -G Ninja \
-          -DCMAKE_MODULE_PATH=$base/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }} \
-          -DCMAKE_PREFIX_PATH=$base/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
-
-      - name: Running cmake build ...
-        run: cmake --build ./build
-
-      - name: Running tests ...
-        run: ctest --test-dir ./build
-
-      - name: Running cmake install ...
-        run: cmake --install ./build --prefix ./install
