@@ -81,7 +81,7 @@ jobs:
           base='${{ github.workspace }}'
           base=""${base//\\//}""
           cmake -S . -B ./build \
-          -DCMAKE_GENERATOR=Ninja \
+          -G Ninja \
           -DCMAKE_MODULE_PATH=$base/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }} \
           -DCMAKE_PREFIX_PATH=$base/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
 
