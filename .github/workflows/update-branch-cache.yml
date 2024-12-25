@@ -49,22 +49,8 @@ jobs:
 
       - uses: seanmiddleditch/gha-setup-ninja@master
 
-      - if: ${{ startsWith(matrix.os, 'macos') }}
-        # Osx does not have Ninja installed.
-        # CMake should used make but vcpkg fail to build on macos-14 and macos-15
-        # beacause cmake canèt find Ninja....
-        name: Installing ninja
-        run: |
-            brew install ninja
-            ninja --version
-        #uses: seanmiddleditch/gha-setup-ninja@master
-        #with:
-        #    version: 1.11.1
-
-
       # Clone the repo
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
             submodules: true
             fetch-depth: 0
