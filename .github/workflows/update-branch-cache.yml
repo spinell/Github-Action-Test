@@ -47,6 +47,8 @@ jobs:
         # Fix configure.ac:60: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE
         run: sudo apt-get install libltdl-dev
 
+      - uses: seanmiddleditch/gha-setup-ninja@master
+
       - if: ${{ startsWith(matrix.os, 'macos') }}
         # Osx does not have Ninja installed.
         # CMake should used make but vcpkg fail to build on macos-14 and macos-15
