@@ -33,7 +33,9 @@ jobs:
             - os : ubuntu-22.04
               compiler: { cc: gcc, cxx: g++, version: 12}
             - os : ubuntu-22.04
-              compiler: { cc: gcc, cxx: g++, version: 12}
+              compiler: { cc: gcc, cxx: g++, version: 13}
+            - os : ubuntu-22.04
+              compiler: { cc: gcc, cxx: g++, version: 14}
             - os : ubuntu-22.04
               compiler: { cc: clang, cxx: clang++, version: 16}
             - os : ubuntu-22.04
