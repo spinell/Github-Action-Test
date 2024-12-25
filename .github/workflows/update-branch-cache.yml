@@ -53,6 +53,15 @@ jobs:
             submodules: true
             fetch-depth: 0
 
+      - if: ${{ startsWith(matrix.os, 'macos') }}
+        # Osx does not have Ninja installed.
+        # CMake should used make but vcpkg fail to build on macos-14 and macos-15
+        # beacause cmake canèt find Ninja....
+        name: Installing ninja
+        run: |
+            brew install ninja
+            ninja --version
+
       # Setup vcpkg: ensures vcpkg is downloaded and built.
       # This will also run vcpkg
       - name: Setup a new (or from cache) vcpkg (and does not build any package)
