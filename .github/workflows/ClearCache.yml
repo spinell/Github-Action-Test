@@ -1,6 +1,9 @@
 # Clear the GitHub action cache
 # from https://stackoverflow.com/questions/63521430/clear-cache-in-github-actions
 # https://github.com/roboflow/supervision/blob/develop/.github/workflows/clear-cache.yml
+#
+# FIXME: Look like it can only delete 30 cache per run ....
+#
 name: Clear cache
 
 on:
@@ -37,4 +40,4 @@ jobs:
                 console.error(`Failed to delete cache ${cache.key}: ${error.message}`)
               }
             }
-            console.log(`Cache cleanup completed. Deleted ${deletedCount} caches.`)            
+            console.log(`Cache cleanup completed. Deleted ${deletedCount} caches.`)
