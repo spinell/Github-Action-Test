@@ -14,7 +14,8 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}-${{ matrix.buildConfig }}
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix:
+      fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matrix
+        matrix:
         os: [ ubuntu-22.04, ubuntu-24.04]
         buildConfig: [Debug, Release, RelWithDebInfo]
         compiler:
