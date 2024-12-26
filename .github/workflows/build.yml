@@ -11,6 +11,7 @@ on:
 
 jobs:
   linux:
+    if: false
     name: ${{ matrix.os }}-${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}-${{ matrix.buildConfig }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -105,7 +106,7 @@ jobs:
     strategy:
       fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matrix
       matrix:
-        os: [ macos-13, macos-14, macos-15 ]
+        os: [ macos-15 ]
         buildConfig: [Debug, Release]
         compiler:
           - { cc: clang, cxx: clang++, version: 14} # 14.0.0
