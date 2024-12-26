@@ -123,6 +123,7 @@ jobs:
               compiler: { cc: clang, cxx: clang++, version: 18 }
             - os : macos-15
               compiler: { cc: clang, cxx: clang++, version: 14 }
+
     env:
       VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
@@ -168,9 +169,22 @@ jobs:
           CMAKE_GENERATOR: "Ninja"
           CMAKE_BUILD_TYPE: "${{ matrix.buildConfig }}"
         run: |
-          clang_path=$(brew --prefix llvm@${{  matrix.compiler.version }})/bin
-          export CC="$clang_path/${{ matrix.compiler.cc }}"
-          export CXX="$clang_path/${{ matrix.compiler.cxx }}"
+          # Try to find clang path
+          if [[ ${{ matrix.compiler.cc }} == "clang" ]] then;
+            if [[ ${{ matrix.os }} == "macos-15" && ${{  matrix.compiler.version }} == "18" ]] then;
+              export CC=$(brew --prefix llvm@${{  matrix.compiler.version }})/bin/clang
+              export CXX=$(brew --prefix llvm@${{  matrix.compiler.version }})/bin/clang++
+            elif [[ ${{ matrix.os }} == "macos-14" && ${{  matrix.compiler.version }} == "15" ]] then;
+              export CC=$(brew --prefix llvm@${{  matrix.compiler.version }})/bin/clang
+              export CXX=$(brew --prefix llvm@${{  matrix.compiler.version }})/bin/clang++
+            elif [[ ${{ matrix.os }} == "macos-13" && ${{  matrix.compiler.version }} == "15" ]] then;
+              export CC=$(brew --prefix llvm@${{  matrix.compiler.version }})/bin/clang
+              export CXX=$(brew --prefix llvm@${{  matrix.compiler.version }})/bin/clang++
+            else
+              export CC=clang
+              export CXX=clang++
+            fi
+          fi
 
           cmake -S . -B ./build \
             -DCMAKE_MODULE_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}  \
