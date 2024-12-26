@@ -140,11 +140,15 @@ jobs:
       - run: /usr/bin/gcc   --version
       - run: ls -la /usr/bin/gcc
       - run: ls -la /usr/bin/clang
-      - run: ls -la /opt/homebrew/opt/*
+      - run: ls -la /usr/local/opt/ || echo ""
+      - run: ls -la /usr/local/opt/ || echo ""
       - run: echo $PATH
       - run: echo "$(brew --prefix llvm)/bin/clang"
       - run: echo "$(brew --prefix llvm@15)/bin/clang"
       - run: echo "$(brew --prefix llvm@18)/bin/"
+      - run: $(brew --prefix gcc@12) --version
+      - run: $(brew --prefix gcc@13) --version
+      - run: $(brew --prefix gcc@14) --version
 
       # Clone the repo
       - name: Cloning git repo
