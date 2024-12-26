@@ -97,3 +97,73 @@ jobs:
 
       - name: Running cmake install ...
         run: cmake --install ./build --prefix ./install
+
+  osx:
+    name: ${{ matrix.os }}-${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}-${{ matrix.buildConfig }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ macos-13, macos-14, macos-15 ]
+        buildConfig: [Debug, Release, RelWithDebInfo]
+        compiler:
+          - { cc: clang, cxx: clang++, version: 14}
+          - { cc: clang, cxx: clang++, version: 15}
+          - { cc: clang, cxx: clang++, version: 18}
+          - { cc: gcc, cxx: g++, version: 12}
+          - { cc: gcc, cxx: g++, version: 13}
+          - { cc: gcc, cxx: g++, version: 14}
+        exclude:
+            - os : macos-14
+              compiler: { cc: clang, cxx: clang++, version: 14 }
+            - os : macos-13
+              compiler: { cc: clang, cxx: clang++, version: 18 }
+            - os : macos-14
+              compiler: { cc: clang, cxx: clang++, version: 18 }
+    env:
+      VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+    steps:
+        # Osx does not have Ninja installed.
+        # CMake should used make but vcpkg fail to build on macos-14 and macos-15
+        # beacause cmake canèt find Ninja....
+      - name: Installing ninja
+        run: |
+            brew install ninja
+
+      # Clone the repo
+      - name: Cloning git repo
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      # Setup vcpkg: ensures vcpkg is downloaded and built.
+      # Since vcpkg.json is being used later on to install the packages
+      # when `run-cmake` runs, no packages are installed at this time
+      # (and vcpkg does not run).
+      - name: Setup a new (or from cache) vcpkg (and does not build any package)
+        uses: lukka/run-vcpkg@v11
+        id: runvcpkg
+        env:
+          VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
+        with:
+          runVcpkgInstall: true
+
+      - name: Running cmake configure ...
+        env:
+          CC: "${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}"
+          CXX: "${{ matrix.compiler.cxx }}-${{ matrix.compiler.version }}"
+          CMAKE_GENERATOR: "Ninja"
+          CMAKE_BUILD_TYPE: "${{ matrix.buildConfig }}"
+        run: |
+          cmake -S . -B ./build \
+            -DCMAKE_MODULE_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}  \
+            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
+
+      - name: Running cmake build ...
+        run: cmake --build ./build
+
+      - name: Running tests ...
+        run: ctest --test-dir ./build
+
+      - name: Running cmake install ...
+        run: cmake --install ./build --prefix ./install
