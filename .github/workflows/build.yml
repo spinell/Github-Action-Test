@@ -135,6 +135,8 @@ jobs:
 
       - run: which clang
       - run: which clang++
+      - run: ls -la /usr/bin/clang*
+      - run: ls -la /opt/homebrew/bin
       - run: which gcc
       - run: which g++
       - run: echo $PATH
@@ -165,6 +167,7 @@ jobs:
           CMAKE_GENERATOR: "Ninja"
           CMAKE_BUILD_TYPE: "${{ matrix.buildConfig }}"
         run: |
+          echo $PATH
           cmake -S . -B ./build \
             -DCMAKE_MODULE_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}  \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
