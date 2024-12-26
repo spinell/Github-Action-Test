@@ -102,23 +102,26 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}-${{ matrix.buildConfig }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matrix
       matrix:
         os: [ macos-13, macos-14, macos-15 ]
         buildConfig: [Debug, Release, RelWithDebInfo]
         compiler:
-          - { cc: clang, cxx: clang++, version: 14}
-          - { cc: clang, cxx: clang++, version: 15}
-          - { cc: clang, cxx: clang++, version: 18}
-          - { cc: gcc, cxx: g++, version: 12}
-          - { cc: gcc, cxx: g++, version: 13}
-          - { cc: gcc, cxx: g++, version: 14}
+          - { cc: clang, cxx: clang++, version: 14} # 14.0.0
+          - { cc: clang, cxx: clang++, version: 15} # 15.0.7
+          - { cc: clang, cxx: clang++, version: 18} # 18.1.8
+          - { cc: gcc, cxx: g++, version: 12} # GCC 12.4.0
+          - { cc: gcc, cxx: g++, version: 13} # GCC 13.3.0
+          - { cc: gcc, cxx: g++, version: 14} # GCC 14.2.0_1
         exclude:
-            - os : macos-14
-              compiler: { cc: clang, cxx: clang++, version: 14 }
             - os : macos-13
               compiler: { cc: clang, cxx: clang++, version: 18 }
             - os : macos-14
+              compiler: { cc: clang, cxx: clang++, version: 14 }
+            - os : macos-14
               compiler: { cc: clang, cxx: clang++, version: 18 }
+            - os : macos-15
+              compiler: { cc: clang, cxx: clang++, version: 15 }
     env:
       VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
