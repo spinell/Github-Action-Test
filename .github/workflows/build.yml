@@ -60,12 +60,6 @@ jobs:
         run: sudo apt-get install libltdl-dev
       - run: sudo apt-get install ninja-build
 
-      - run: which clang
-      - run: which clang++
-      - run: which gcc
-      - run: which g++
-      - run: echo $PATH
-
       # Clone the repo
       - name: Cloning git repo
         uses: actions/checkout@v3
@@ -138,6 +132,12 @@ jobs:
       - name: Installing ninja
         run: |
             brew install ninja
+
+      - run: which clang
+      - run: which clang++
+      - run: which gcc
+      - run: which g++
+      - run: echo $PATH
 
       # Clone the repo
       - name: Cloning git repo
