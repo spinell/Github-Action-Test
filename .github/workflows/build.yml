@@ -140,8 +140,7 @@ jobs:
       - run: /usr/bin/gcc   --version
       - run: ls -la /usr/bin/gcc
       - run: ls -la /usr/bin/clang
-      - run: ls -la /usr/local/opt/llvm*
-      - run: ls -la /usr/local/opt/llvm*
+      - run: ls -la /usr/local/opt/
       - run: echo $PATH
       - run: echo "$(brew --prefix llvm)/bin/clang"
       - run: echo "$(brew --prefix llvm@15)/bin/clang"
