@@ -168,9 +168,10 @@ jobs:
           CMAKE_GENERATOR: "Ninja"
           CMAKE_BUILD_TYPE: "${{ matrix.buildConfig }}"
         run: |
-          clang_path=$(brew --prefix llvm@${{  matrix.compiler.version }})/bin/clang
+          clang_path=$(brew --prefix llvm@${{  matrix.compiler.version }})/bin
           export CC="$clang_path/${{ matrix.compiler.cc }}"
           export CXX="$clang_path/${{ matrix.compiler.cxx }}"
+
           cmake -S . -B ./build \
             -DCMAKE_MODULE_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}  \
             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
