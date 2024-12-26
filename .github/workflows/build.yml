@@ -146,9 +146,12 @@ jobs:
       - run: echo "$(brew --prefix llvm)/bin/clang"
       - run: echo "$(brew --prefix llvm@15)/bin/clang"
       - run: echo "$(brew --prefix llvm@18)/bin/"
-      - run: $(brew --prefix gcc@12) --version
-      - run: $(brew --prefix gcc@13) --version
-      - run: $(brew --prefix gcc@14) --version
+      - run: $(brew --prefix gcc@12)/bin/gcc --version
+      - run: $(brew --prefix gcc@13)/bin/gcc --version
+      - run: $(brew --prefix gcc@14)/bin/gcc --version
+      - run: which gcc-12 || echo ""
+      - run: which gcc-13 || echo ""
+      - run: which gcc-14 || echo ""
 
       # Clone the repo
       - name: Cloning git repo
