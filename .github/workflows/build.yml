@@ -111,9 +111,9 @@ jobs:
           - { cc: clang, cxx: clang++, version: 14} # 14.0.0
           - { cc: clang, cxx: clang++, version: 15} # 15.0.7
           - { cc: clang, cxx: clang++, version: 18} # 18.1.8
-#         - { cc: gcc, cxx: g++, version: 12} # GCC 12.4.0   (June 20, 2024)
-#         - { cc: gcc, cxx: g++, version: 13} # GCC 13.3.0   (May 21, 2024)
-#         - { cc: gcc, cxx: g++, version: 14} # GCC 14.2.0   (August 1, 2024)
+          - { cc: gcc, cxx: g++, version: 12} # GCC 12.4.0   (June 20, 2024)
+          - { cc: gcc, cxx: g++, version: 13} # GCC 13.3.0   (May 21, 2024)
+          - { cc: gcc, cxx: g++, version: 14} # GCC 14.2.0   (August 1, 2024)
         exclude:
             - os : macos-13
               compiler: { cc: clang, cxx: clang++, version: 18 }
@@ -146,12 +146,15 @@ jobs:
       - run: echo "$(brew --prefix llvm)/bin/clang"
       - run: echo "$(brew --prefix llvm@15)/bin/clang"
       - run: echo "$(brew --prefix llvm@18)/bin/"
-      - run: ls -la $(brew --prefix gcc@12)/bin
-      - run: ls -la $(brew --prefix gcc@13)/bin
-      - run: ls -la $(brew --prefix gcc@14)/bin
+#      - run: ls -la $(brew --prefix gcc@12)/bin
+#      - run: ls -la $(brew --prefix gcc@13)/bin
+#      - run: ls -la $(brew --prefix gcc@14)/bin
       - run: which gcc-12 || echo ""
       - run: which gcc-13 || echo ""
       - run: which gcc-14 || echo ""
+      - run: ls -la /usr/local/bin/gcc-12
+      - run: ls -la /usr/local/bin/gcc-13
+      - run: ls -la /usr/local/bin/gcc-14
 
       # Clone the repo
       - name: Cloning git repo
@@ -196,6 +199,9 @@ jobs:
               export CC=/usr/bin/clang
               export CXX=/usr/bin/clang++
             fi
+          else
+              export CC="${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}"
+              export CXX="${{ matrix.compiler.cxx }}-${{ matrix.compiler.version }}"
           fi
 
           cmake -S . -B ./build \
