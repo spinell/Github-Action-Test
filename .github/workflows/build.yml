@@ -146,9 +146,9 @@ jobs:
       - run: echo "$(brew --prefix llvm)/bin/clang"
       - run: echo "$(brew --prefix llvm@15)/bin/clang"
       - run: echo "$(brew --prefix llvm@18)/bin/"
-      - run: $(brew --prefix gcc@12)/bin/gcc --version
-      - run: $(brew --prefix gcc@13)/bin/gcc --version
-      - run: $(brew --prefix gcc@14)/bin/gcc --version
+      - run: ls -la $(brew --prefix gcc@12)/bin
+      - run: ls -la $(brew --prefix gcc@13)/bin
+      - run: ls -la $(brew --prefix gcc@14)/bin
       - run: which gcc-12 || echo ""
       - run: which gcc-13 || echo ""
       - run: which gcc-14 || echo ""
