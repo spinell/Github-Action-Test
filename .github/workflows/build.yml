@@ -144,9 +144,9 @@ jobs:
       - run: which gcc
       - run: which g++
       - run: echo $PATH
-      - run: ls -la '$(brew --prefix llvm)/bin/clang'
-      - run: ls -la '$(brew --prefix llvm@15)/bin/clang'
-      - run: ls -la '$(brew --prefix llvm@18)/bin/clang'
+      - run: echo '$(brew --prefix llvm)/bin/clang'
+      - run: echo '$(brew --prefix llvm@15)/bin/clang'
+      - run: echo '$(brew --prefix llvm@18)/bin/clang'
 
       # Clone the repo
       - name: Cloning git repo
