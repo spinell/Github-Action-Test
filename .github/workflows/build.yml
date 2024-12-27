@@ -238,7 +238,7 @@ jobs:
         run: |
           $basePath = "${{ github.workspace }}" -replace "\\", "/"
           $modulePath="$basePath/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}"
-          cmake -S . -B ./build -DCMAKE_MODULE_PATH=${modulePath} -DCMAKE_PREFIX_PATH=${modulePath}
+          cmake -S . -B ./build -DCMAKE_MODULE_PATH=$modulePath -DCMAKE_PREFIX_PATH=$modulePath
 
       - name: Running cmake build ...
         run: cmake --build ./build
