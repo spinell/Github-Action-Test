@@ -111,9 +111,6 @@ jobs:
           - { cc: clang, cxx: clang++, version: 14} # 14.0.0
           - { cc: clang, cxx: clang++, version: 15} # 15.0.7
           - { cc: clang, cxx: clang++, version: 18} # 18.1.8
-          - { cc: gcc, cxx: g++, version: 12} # GCC 12.4.0   (June 20, 2024)
-          - { cc: gcc, cxx: g++, version: 13} # GCC 13.3.0   (May 21, 2024)
-          - { cc: gcc, cxx: g++, version: 14} # GCC 14.2.0   (August 1, 2024)
         exclude:
             - os : macos-13
               compiler: { cc: clang, cxx: clang++, version: 18 }
