@@ -189,3 +189,51 @@ jobs:
 
       - name: Running cmake install ...
         run: cmake --install ./build --prefix ./install
+
+  windows:
+    name: Windows-2022-${{ matrix.buildConfig }}
+    runs-on: Windows-2022
+    strategy:
+      matrix:
+        buildConfig: [Debug, Release, RelWithDebInfo]
+    env:
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+    steps:
+      #
+      # Clone the repo
+      #
+      - name: Cloning git repo
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      # Setup vcpkg: ensures vcpkg is downloaded and built.
+      # Since vcpkg.json is being used later on to install the packages
+      # when `run-cmake` runs, no packages are installed at this time
+      # (and vcpkg does not run).
+      - name: Setup a new (or from cache) vcpkg (and does not build any package)
+        uses: lukka/run-vcpkg@v11
+        id: runvcpkg
+        env:
+          VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
+        with:
+          runVcpkgInstall: true
+
+      - name: Running cmake configure ...
+        env:
+          CMAKE_GENERATOR: "Ninja"
+          CMAKE_BUILD_TYPE: "${{ matrix.buildConfig }}"
+        run: |
+          cmake -S . -B ./build \
+            -DCMAKE_MODULE_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}  \
+            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
+
+      - name: Running cmake build ...
+        run: cmake --build ./build
+
+      - name: Running tests ...
+        run: ctest --test-dir ./build
+
+      - name: Running cmake install ...
+        run: cmake --install ./build --prefix ./install
