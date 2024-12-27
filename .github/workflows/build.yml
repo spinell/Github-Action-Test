@@ -225,12 +225,15 @@ jobs:
 
       - name: Running cmake configure ...
         env:
+          CC: cl.exe
+          CXX: cl.exe
           CMAKE_GENERATOR: "Ninja"
           CMAKE_BUILD_TYPE: "${{ matrix.buildConfig }}"
         run: |
+          $basePath = "${{ github.workspace }}/vcpkg_installed/x64-windows" -replace "\\", "/"
           cmake -S . -B ./build `
-            -DCMAKE_MODULE_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }} `
-            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
+            -DCMAKE_MODULE_PATH=${basePath}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }} `
+            -DCMAKE_PREFIX_PATH=${basePath}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
 
       - name: Running cmake build ...
         run: cmake --build ./build
