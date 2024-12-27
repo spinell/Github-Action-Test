@@ -5,8 +5,6 @@ add_executable(Test1 Test1.cpp)
 target_link_libraries(
     Test1
     PRIVATE
-        GTest::gtest
-        GTest::gtest_main
         GTest::gmock
         GTest::gmock_main
 )
@@ -18,8 +16,6 @@ target_link_libraries(
     PRIVATE
         GTest::gtest
         GTest::gtest_main
-        GTest::gmock
-        GTest::gmock_main
 )
 add_test(NAME Test2 COMMAND Test2)
 
@@ -29,8 +25,6 @@ target_link_libraries(
     PRIVATE
         GTest::gtest
         GTest::gtest_main
-        GTest::gmock
-        GTest::gmock_main
 )
 add_test(NAME Test3_1 COMMAND Test3)
 add_test(NAME Test3_2 COMMAND Test3)
