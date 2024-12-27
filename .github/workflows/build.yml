@@ -199,6 +199,10 @@ jobs:
     env:
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - run : which ninja
+      - run : ninja --version
+
       #
       # Clone the repo
       #
