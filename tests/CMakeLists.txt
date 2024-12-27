@@ -1,6 +1,18 @@
 find_package(GTest 1.15.2 EXACT CONFIG REQUIRED)
 message(STATUS "Found GTest in ${GTest_DIR}")
 
+include(CMakePrintHelpers)
+cmake_print_properties(TARGETS GTest::gtest_main PROPERTIES LOCATION)
+cmake_print_properties(TARGETS GTest::gtest_main PROPERTIES INTERFACE_LINK_LIBRARIES)
+cmake_print_properties(TARGETS GTest::gtest_main PROPERTIES INTERFACE_INCLUDE_DIRECTORIES)
+cmake_print_properties(TARGETS GTest::gtest_main PROPERTIES INCLUDE_DIRECTORIES)
+
+cmake_print_properties(TARGETS GTest::gtest PROPERTIES LOCATION)
+cmake_print_properties(TARGETS GTest::gtest PROPERTIES INTERFACE_LINK_LIBRARIES)
+cmake_print_properties(TARGETS GTest::gtest PROPERTIES INTERFACE_INCLUDE_DIRECTORIES)
+cmake_print_properties(TARGETS GTest::gtest PROPERTIES INCLUDE_DIRECTORIES)
+
+
 add_executable(Test1 Test1.cpp)
 target_link_libraries(
     Test1
