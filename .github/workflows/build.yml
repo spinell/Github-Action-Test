@@ -16,43 +16,15 @@ jobs:
     strategy:
       fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matrix
       matrix:
-        os: [ ubuntu-22.04, ubuntu-24.04]
+        os: [ ubuntu-24.04]
         buildConfig: [Debug, Release, RelWithDebInfo]
         compiler:
-          - { cc: gcc, cxx: g++, version: 10}
-          - { cc: gcc, cxx: g++, version: 11}
           - { cc: gcc, cxx: g++, version: 12}
           - { cc: gcc, cxx: g++, version: 13}
           - { cc: gcc, cxx: g++, version: 14}
-          - { cc: clang, cxx: clang++, version: 13 }
-          - { cc: clang, cxx: clang++, version: 14 }
-          - { cc: clang, cxx: clang++, version: 15 }
           - { cc: clang, cxx: clang++, version: 16 }
           - { cc: clang, cxx: clang++, version: 17 }
           - { cc: clang, cxx: clang++, version: 18 }
-        exclude:
-            - os : ubuntu-22.04
-              compiler: { cc: gcc, cxx: g++, version: 12}
-            - os : ubuntu-22.04
-              compiler: { cc: gcc, cxx: g++, version: 13}
-            - os : ubuntu-22.04
-              compiler: { cc: gcc, cxx: g++, version: 14}
-            - os : ubuntu-22.04
-              compiler: { cc: clang, cxx: clang++, version: 16}
-            - os : ubuntu-22.04
-              compiler: { cc: clang, cxx: clang++, version: 17}
-            - os : ubuntu-22.04
-              compiler: { cc: clang, cxx: clang++, version: 18}
-            - os : ubuntu-24.04
-              compiler: { cc: gcc, cxx: g++, version: 10}
-            - os : ubuntu-24.04
-              compiler: { cc: gcc, cxx: g++, version: 11}
-            - os : ubuntu-24.04
-              compiler: { cc: clang, cxx: clang++, version: 13}
-            - os : ubuntu-24.04
-              compiler: { cc: clang, cxx: clang++, version: 14}
-            - os : ubuntu-24.04
-              compiler: { cc: clang, cxx: clang++, version: 15}
     env:
       VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
