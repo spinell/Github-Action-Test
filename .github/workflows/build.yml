@@ -199,18 +199,17 @@ jobs:
     env:
         VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
-      - uses: seanmiddleditch/gha-setup-ninja@master
-      - run : which ninja
-      - run : ninja --version
 
-      #
       # Clone the repo
-      #
       - name: Cloning git repo
         uses: actions/checkout@v3
         with:
           submodules: true
           fetch-depth: 0
+
+      # Install ninja
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - run : ninja --version
 
       # Setup vcpkg: ensures vcpkg is downloaded and built.
       # Since vcpkg.json is being used later on to install the packages
@@ -223,9 +222,6 @@ jobs:
           VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
         with:
           runVcpkgInstall: true
-
-      - run: echo %PATH%
-      - run: Write-Output $env:PATH
 
       - name: Running cmake configure ...
         env:
