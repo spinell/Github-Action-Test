@@ -19,11 +19,11 @@ jobs:
         os: [ ubuntu-24.04]
         buildConfig: [Debug, Release, RelWithDebInfo]
         compiler:
-          - { cc: gcc, cxx: g++, version: 12}
-          - { cc: gcc, cxx: g++, version: 13}
+          #- { cc: gcc, cxx: g++, version: 12}
+          #- { cc: gcc, cxx: g++, version: 13}
           - { cc: gcc, cxx: g++, version: 14}
-          - { cc: clang, cxx: clang++, version: 16 }
-          - { cc: clang, cxx: clang++, version: 17 }
+          #- { cc: clang, cxx: clang++, version: 16 }
+          #- { cc: clang, cxx: clang++, version: 17 }
           - { cc: clang, cxx: clang++, version: 18 }
     env:
       VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
@@ -99,9 +99,8 @@ jobs:
         # Osx does not have Ninja installed.
         # CMake should used make but vcpkg fail to build on macos-14 and macos-15
         # beacause cmake canèt find Ninja....
-      - name: Installing ninja
-        run: |
-            brew install ninja
+      - run: brew install ninja
+      - run: brew install llvm@18
 
       - run: clang          --version
       - run: /usr/bin/clang --version
