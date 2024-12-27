@@ -123,12 +123,7 @@ jobs:
               compiler: { cc: clang, cxx: clang++, version: 18 }
             - os : macos-15
               compiler: { cc: clang, cxx: clang++, version: 14 }
-            - os : macos-15
-              compiler: { cc: gcc, cxx: g++, version: 12 }
-            - os : macos-15
-              compiler: { cc: gcc, cxx: g++, version: 13 }
-            - os : macos-15
-              compiler: { cc: gcc, cxx: g++, version: 14 }
+
     env:
       VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
