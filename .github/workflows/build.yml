@@ -106,7 +106,7 @@ jobs:
     strategy:
       fail-fast: false # if one job in the matrix fail, don't cancel other jobs inthe matrix
       matrix:
-        os: [ macos-15 ]
+        os: [ macos-13, macos-14, macos-15 ]
         buildConfig: [Debug, Release]
         compiler:
           - { cc: clang, cxx: clang++, version: 14} # 14.0.0
@@ -124,7 +124,12 @@ jobs:
               compiler: { cc: clang, cxx: clang++, version: 18 }
             - os : macos-15
               compiler: { cc: clang, cxx: clang++, version: 14 }
-
+            - os : macos-15
+              compiler: { cc: gcc, cxx: g++, version: 12 }
+            - os : macos-15
+              compiler: { cc: gcc, cxx: g++, version: 13 }
+            - os : macos-15
+              compiler: { cc: gcc, cxx: g++, version: 14 }
     env:
       VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
     steps:
