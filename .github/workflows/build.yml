@@ -223,6 +223,12 @@ jobs:
         with:
           runVcpkgInstall: true
 
+      # setup MSVC shell
+      - name: Set Visual Studio Architecture
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+
       - name: Running cmake configure ...
         env:
           CC: cl.exe
