@@ -77,6 +77,9 @@ message(STATUS "Found SDL2 in ${SDL2_DIR}")
 find_package(EnTT 3.14.0  EXACT REQUIRED CONFIG)
 message(STATUS "Found EnTT in ${EnTT_DIR}")
 
+find_package(spdlog 1.15.0 EXACT REQUIRED CONFIG)
+message(STATUS "Found spdlog in ${spdlog _DIR}")
+
 find_package(unofficial-lua REQUIRED CONFIG)
 
 add_subdirectory(App)
