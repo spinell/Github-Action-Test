@@ -234,8 +234,8 @@ jobs:
         shell: bash
         run: |
           echo $PATH
-          ls -la ${{ github.workspace }}
-          ls -la ${{ github.workspace }}/ninja-build
+          ls -la /d/a/Github-Action-Test/Github-Action-Test
+          ls -la /d/a/Github-Action-Test/Github-Action-Test/ninja-build
           which ninja
           cmake -S . -B ./build \
             -DCMAKE_MODULE_PATH=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}  \
