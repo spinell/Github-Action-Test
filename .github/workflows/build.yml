@@ -11,7 +11,6 @@ on:
 
 jobs:
   linux:
-    if: false
     name: ${{ matrix.os }}-${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}-${{ matrix.buildConfig }}
     runs-on: ${{ matrix.os }}
     strategy:
