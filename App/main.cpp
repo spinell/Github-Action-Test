@@ -1,9 +1,12 @@
 #include <SDL2/SDL.h>
+#include <spdlog/spdlog.h>
 
 #include <cstdlib>
 #include <iostream>
 
 int main(int argc, char* argv[]) {
+    spdlog::info("Hello !");
+
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return EXIT_FAILURE;
