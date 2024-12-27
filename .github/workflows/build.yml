@@ -168,6 +168,8 @@ jobs:
         uses: lukka/run-vcpkg@v11
         id: runvcpkg
         env:
+          CC: "${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}"
+          CXX: "${{ matrix.compiler.cxx }}-${{ matrix.compiler.version }}"
           VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
         with:
           runVcpkgInstall: true
