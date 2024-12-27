@@ -164,7 +164,7 @@ jobs:
       # Since vcpkg.json is being used later on to install the packages
       # when `run-cmake` runs, no packages are installed at this time
       # (and vcpkg does not run).
-      - if: startsWith(${{ matrix.compiler.cc }}, "gcc")
+      - if: startsWith( matrix.compiler.cc, 'gcc')
         name: aaa
         uses: lukka/run-vcpkg@v11
         id: runvcpkg1
@@ -175,7 +175,7 @@ jobs:
         with:
             runVcpkgInstall: true
 
-      - if: startsWith(${{ matrix.compiler.cc }}, "clang")
+      - if: startsWith(${{ matrix.compiler.cc }}, 'clang')
         name: Setup a new (or from cache) vcpkg (and does not build any package)
         uses: lukka/run-vcpkg@v11
         id: runvcpkg
