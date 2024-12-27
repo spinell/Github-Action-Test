@@ -78,7 +78,7 @@ find_package(EnTT 3.14.0  EXACT REQUIRED CONFIG)
 message(STATUS "Found EnTT in ${EnTT_DIR}")
 
 find_package(spdlog 1.15.0 EXACT REQUIRED CONFIG)
-message(STATUS "Found spdlog in ${spdlog _DIR}")
+message(STATUS "Found spdlog in ${spdlog_DIR}")
 
 find_package(unofficial-lua REQUIRED CONFIG)
 
