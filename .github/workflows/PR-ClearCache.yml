@@ -16,6 +16,6 @@ jobs:
   clear-cache:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/actions/clear-cache.yml
+      - uses: ./.github/workflows/actions/clear-cache
         with:
           branch: ${{ github.event.pull_request.number }}
