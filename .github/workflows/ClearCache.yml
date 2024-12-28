@@ -20,6 +20,9 @@ jobs:
   clear-cache:
     runs-on: ubuntu-latest
     steps:
+      - run: echo ${{ toJSON(github) }}
+      - run: echo ${{ toJSON(github.event.pull_request) }}
+      
       - name: Clear cache
         uses: actions/github-script@v7
         with:
