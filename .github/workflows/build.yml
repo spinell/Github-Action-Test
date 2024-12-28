@@ -77,6 +77,20 @@ jobs:
           paths: "${{ github.workspace }}/build/ctest-test-Summary.xml"
         if: always()
 
+      - name: Generate Test Summary Markdown
+        uses: test-summary/action@v2
+        with:
+          paths: "${{ github.workspace }}/build/ctest-test-Summary.xml"
+          output: test-summary.md
+        if: always()
+
+      - name: Upload test summary
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-summary
+          path: test-summary.md
+        if: always()
+
       - name: Running cmake install ...
         run: cmake --install ./build --prefix ./install
 
