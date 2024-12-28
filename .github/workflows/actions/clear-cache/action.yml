@@ -1,15 +1,22 @@
 name: 'Clear Cache'
 description: 'Clear GitHub action cache for a specific branch.'
+
 inputs:
   branch:  # id of input
     description: 'The branch to delete the cache from'
     required: true
-runs:
+
+  github-token:
+    description: The GitHub token to use.
+    required: true
+
+ runs:
   using: "composite"
   steps:
     - name: Clear cache
       uses: actions/github-script@v7
       with:
+      github-token: ${{ inputs.github-token }}
       script: |
         console.log(`Starting cleanup cache for branch ${{ inputs.branch }}`)
 
