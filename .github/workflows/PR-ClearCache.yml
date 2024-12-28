@@ -1,0 +1,21 @@
+################################################################################
+# Clear the GitHub action cache for a specific PR branche
+################################################################################
+name: PR Clear cache
+run-name: "[PR Clear cache] refs/pull/${{ github.event.pull_request.number }}/merge"
+
+on:
+  pull_request:
+    types:
+      - closed
+
+permissions:
+  actions: write
+
+jobs:
+  clear-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/workflows/actions/clear-cache.yml
+        with:
+          branch: ${{ github.event.pull_request.number }}
