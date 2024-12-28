@@ -85,10 +85,12 @@ jobs:
         if: always()
 
       - name: Upload test summary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: test-summary
-          path: test-summary.md
+          name: test-summary-${{ matrix.os }}-${{ matrix.compiler.cc }}-${{ matrix.compiler.version }}-${{ matrix.buildConfig }}
+          path: |
+            ${{ github.workspace }}/test-summary.md
+            ${{ github.workspace }}/build/ctest-test-Summary.xml
         if: always()
 
       - name: Running cmake install ...
