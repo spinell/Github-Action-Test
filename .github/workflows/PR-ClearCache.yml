@@ -16,6 +16,13 @@ jobs:
   clear-cache:
     runs-on: ubuntu-latest
     steps:
+      # Clone the repo (Required to use custom action in this repo)
+      - name: Cloning git repo
+        uses: actions/checkout@v3
+        with:
+          submodules: false
+          fetch-depth: 0
+
       - uses: ./.github/workflows/actions/clear-cache
         with:
           branch: ${{ github.event.pull_request.number }}
