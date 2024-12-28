@@ -25,5 +25,5 @@ jobs:
 
       - uses: ./.github/workflows/actions/clear-cache
         with:
-          branch: ${{ github.event.pull_request.number }}
+          branch: refs/pull/${{ github.event.pull_request.number }}/merge
           github-token: ${{ github.token }}
