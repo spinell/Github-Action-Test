@@ -66,7 +66,13 @@ jobs:
         run: cmake --build ./build
 
       - name: Running tests ...
-        run: ctest --test-dir ./build
+        run: ctest --test-dir ./build --output-junit ./ctest-result.xml
+
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: "./ctest-result.xml"
+        if: always()
 
       - name: Running cmake install ...
         run: cmake --install ./build --prefix ./install
