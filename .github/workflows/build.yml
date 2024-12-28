@@ -75,11 +75,13 @@ jobs:
         uses: test-summary/action@v2
         with:
           paths: "${{ github.workspace }}/build/ctest-test-Summary.xml"
+          show: "all"
         if: always()
 
       - name: Generate Test Summary Markdown
         uses: test-summary/action@v2
         with:
+          show: "all"
           paths: "${{ github.workspace }}/build/ctest-test-Summary.xml"
           output: test-summary.md
         if: always()
