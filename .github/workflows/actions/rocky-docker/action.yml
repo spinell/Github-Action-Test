@@ -22,4 +22,4 @@ runs:
   env:
     MY_ENV_1: "Value1"
     MY_ENV_2: "Value2"
-  entrypoint: 'entrypoint.sh'
+  entrypoint: './entrypoint.sh'
