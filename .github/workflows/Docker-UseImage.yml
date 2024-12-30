@@ -18,7 +18,8 @@ jobs:
         MY_CONTAINER_ENV_2: Value2
       options: --cpus 1
 
-    # all step will run in the container
+    # all steps will run in the container defined above execpt
+    # for those who declaire a container to use
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -33,3 +34,10 @@ jobs:
         run: |
           echo $PWD
           ls -la .
+
+      - name: Running alpine
+        uses: docker://alpine:3.8
+        with:
+          args: |
+            /bin/sh -c "Hello from alpine"
+            /bin/sh -c "env"
