@@ -20,10 +20,15 @@ jobs:
 
     # all step will run in the container
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
       - name: Display Os Info
         run: cat /etc/os-release
+
       - name: Display Env
         run: env
+
       - name: Display working directory
         run: |
           echo $PWD
