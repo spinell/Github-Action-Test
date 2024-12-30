@@ -17,6 +17,9 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Build Image
         run : docker build --file ./docker/rocky.dockerfile --tag ghcr.io/spinell/rocky:latest .
 
