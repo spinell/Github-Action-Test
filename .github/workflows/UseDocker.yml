@@ -1,0 +1,36 @@
+# Workflow example that use a custom "docker" action.
+name: UseDocker
+
+on:
+  workflow_dispatch:
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      # Clone the repo
+      # This is required to use the custom action in this repo.
+      - name: Cloning git repo
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      # Use a custom action based on docker
+      - name: Hello world action step
+        id: hello
+        uses: ./.github/workflows/actions/alpine-docker
+        with:
+          who-to-greet: 'Mona the Octocat'
+
+        # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
+
+      # Use a custom action based on docker
+      - name: Hello world action step
+        id: hello2
+        uses: ./.github/workflows/actions/rocky-docker
+        with:
+          who-to-greet: 'Mona the Octocat'
