@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Build Image
-        run : docker build --file ./docker/rocky.dockerfile --tag ghcr/spinell/rocky:latest
+        run : docker build --file ./docker/rocky.dockerfile --tag ghcr/spinell/rocky:latest .
 
       - name: Push Image
         run : docker push ghcr/spinell/rocky:latest
