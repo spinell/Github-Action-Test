@@ -1,0 +1,55 @@
+name: BuildAndTest
+
+on:
+  workflow_call:
+    inputs:
+      cc:
+        required: true
+        type: string
+        default: gcc-14
+      cxx:
+        required: true
+        type: string
+        default: g++-14
+jobs:
+  build:
+    name: Job1
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Install libltdl-dev ......
+        run: sudo apt-get install libltdl-dev
+
+      - name: Install ninja ......
+        run: sudo apt-get install ninja-build
+
+      # Clone the repo
+      - name: Cloning git repo
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      # Download vcpkg.
+      # This will download the version (commit) defined in the vcpkg-configuration.json
+      # This will also run vcpkg install after.
+      - name: Setup a new (or from cache) vcpkg (and does not build any package)
+        uses: lukka/run-vcpkg@v11
+        id: runvcpkg
+        env:
+          VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
+        with:
+          runVcpkgInstall: true
+
+        #
+        # Run cmake configure
+        #
+      - name: Running cmake configure ...
+        env:
+            CC: ${{ inputs.cc }}
+            CXX: ${{ inputs.cxx }}
+            CMAKE_GENERATOR: "Ninja"
+            CMAKE_BUILD_TYPE: "Release"
+        run: |
+            module_path=${{ github.workspace }}/vcpkg_installed/${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}
+            cmake -S . -B ./build \
+              -DCMAKE_MODULE_PATH=$module_path -DCMAKE_PREFIX_PATH=$module_path
