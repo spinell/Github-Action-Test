@@ -1,6 +1,6 @@
 #!/bin/sh -l
 
-echo "Hello $1"
+echo "Hello from RockyLinux: (arg: $1)"
 
 echo "=========== Environment ==========="
 env

@@ -1,6 +1,6 @@
 #!/bin/sh -l
 
-echo "Hello $1"
+echo "Hello from Alpine: (arg: $1)"
 
 echo "=========== Environment ==========="
 env
