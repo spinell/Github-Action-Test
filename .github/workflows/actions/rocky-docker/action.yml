@@ -16,7 +16,7 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'rockylinux:9'
+  image: 'docker://rockylinux:9'
   args:
     - ${{ inputs.who-to-greet }}
   env:
