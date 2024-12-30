@@ -1,0 +1,28 @@
+#
+# Workflow example that run command in a docker container.
+#
+name: UseDocker
+
+on:
+  workflow_dispatch:
+
+jobs:
+  container-test-job:
+    runs-on: ubuntu-24.04
+
+    # define the docker container to use
+    container:
+      image: quay.io/rockylinux/rockylinux:9.5
+      env:
+        MY_CONTAINER_ENV_1: Value1
+        MY_CONTAINER_ENV_2: Value2
+      options: --cpus 1
+
+    # all step will run in the container
+    steps:
+      - name: Display Os Info
+        run: cat /etc/os-release
+      - name: Display Env
+        run: env
+      - name: Display working directory
+        run: ls -la .
