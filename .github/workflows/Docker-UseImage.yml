@@ -39,5 +39,5 @@ jobs:
         uses: docker://alpine:3.8
         with:
           args: |
-            /bin/sh -c "Hello from alpine"
+            /bin/sh -c "echo Hello from alpine"
             /bin/sh -c "env"
