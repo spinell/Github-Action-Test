@@ -17,20 +17,22 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      # Use a custom action based on docker
+      # Use a custom action based on a dockerfile (alpine)
       - name: Hello world action step
-        id: hello
+        id: alpineDocker
         uses: ./.github/workflows/actions/alpine-docker
         with:
           who-to-greet: 'Mona the Octocat'
 
-        # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
-
-      # Use a custom action based on docker
+      # Use a custom action based on a docker image (rocky)
       - name: Hello world action step
-        id: hello2
+        id: rockerDocker
         uses: ./.github/workflows/actions/rocky-docker
         with:
-          who-to-greet: 'Mona the Octocat'
+          who-to-greet: 'YoYo'
+
+        # Use the output from the 'alpineDocker' and  'rockerDocker' step
+      - name: Get the output time
+        run: |
+          echo "The time was ${{ steps.alpineDocker.outputs.time }} from alpine."
+          echo "The time was ${{ steps.rockerDocker.outputs.time }} from rocky."

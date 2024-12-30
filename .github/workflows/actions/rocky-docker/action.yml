@@ -1,5 +1,5 @@
 #
-# Custom action that use docker
+# Custom action that use a docker image
 #
 name: 'Hello World'
 description: 'Greet someone and record the time'
@@ -16,9 +16,10 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'rockylinux:9'
   args:
     - ${{ inputs.who-to-greet }}
   env:
     MY_ENV_1: "Value1"
     MY_ENV_2: "Value2"
+  entrypoint: 'entrypoint.sh'

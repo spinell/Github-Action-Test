@@ -1,5 +1,8 @@
 #
-# Custom action that use docker
+# Custom action that use a dockerfile
+# GitHub action will build the image from the dockerfile
+#
+# See: https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-docker-container-action
 #
 name: 'Hello Rocky'
 description: 'Using rocky linux.'
