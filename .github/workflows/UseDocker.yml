@@ -25,4 +25,6 @@ jobs:
       - name: Display Env
         run: env
       - name: Display working directory
-        run: ls -la .
+        run: |
+          echo $PWD
+          ls -la .
