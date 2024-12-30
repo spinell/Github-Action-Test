@@ -1,0 +1,24 @@
+# Workflow example build a docker image and push it
+name: Docker-BuildAndPush
+
+on:
+  workflow_dispatch:
+
+jobs:
+  docker_build_and_push:
+    runs-on: ubuntu-24.04
+    name: A job that build a docker image
+    steps:
+      # Clone the repo
+      # This is required to use the custom action in this repo.
+      - name: Cloning git repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Build Image
+        run : docker build ./docker/rocky9.5.dockerfile -t ghcr/spinell/rocky:latest
+
+      - name: Push Image
+        run : docker push ghcr/spinell/rocky:latest
