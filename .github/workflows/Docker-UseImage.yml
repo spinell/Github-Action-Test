@@ -1,7 +1,7 @@
 #
 # Workflow example that run command in a docker container.
 #
-name: UseDocker
+name: Docker-UseImage
 
 on:
   workflow_dispatch:
