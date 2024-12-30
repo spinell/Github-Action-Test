@@ -8,6 +8,13 @@ jobs:
   docker_build_and_push:
     runs-on: ubuntu-24.04
     name: A job that build a docker image
+
+  permissions:
+    contents: read
+    packages: write
+    attestations: write
+    id-token: write
+
     steps:
       # Clone the repo
       # This is required to use the custom action in this repo.
