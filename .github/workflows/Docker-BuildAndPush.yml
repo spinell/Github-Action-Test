@@ -9,11 +9,11 @@ jobs:
     runs-on: ubuntu-24.04
     name: A job that build a docker image
 
-  permissions:
-    contents: read
-    packages: write
-    attestations: write
-    id-token: write
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
 
     steps:
       # Clone the repo
