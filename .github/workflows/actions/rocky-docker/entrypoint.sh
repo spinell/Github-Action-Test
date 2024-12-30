@@ -1,9 +1,11 @@
 #!/bin/sh -l
 
 echo "Hello $1"
-echo "MY_ENV_1=$MY_ENV_1"
-echo "MY_ENV_2=$MY_ENV_2"
 
+echo "=========== Environment ==========="
+env
+
+echo "=========== os-release ==========="
 cat /etc/os-release
 
 echo "PWD: $PWD"
