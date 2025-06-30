@@ -8,21 +8,59 @@ name: Test-Annotation
 on: workflow_dispatch
 
 jobs:
-  GenerateAnnotation:
-    name: GenerateAnnotation
+  GenerateAnnotation1:
+    name: GenerateAnnotation1
     runs-on: ubuntu-24.04
     steps:
+        #
+        # Generate Warning anotations
+        #
         - name: Generate Warning
           run: |
             echo "::warning::This is a custom warning."
             echo "::warning title=Hey::This is a custom warning with title."
             echo "::warning file=tests/Test1.cpp,line=10,endLine=20,title=Toto::Big warning!"
 
+        #
+        # Generate Error anotations
+        #
         - name: Generate Error
           run: |
             echo "::error::This is a custom error."
             echo "::error title=Hey::This is a custom error with title."
 
+        #
+        # Generate notice anotations
+        #
+        - name: Generate Notices
+          run: |
+            echo "::notice::This is a custom notice."
+            echo "::notice title=Hey::This is a custom notice with title."
+
+  GenerateAnnotation2:
+    name: GenerateAnnotation1
+    runs-on: ubuntu-24.04
+    steps:
+        #
+        # Generate Warning anotations
+        #
+        - name: Generate Warning
+          run: |
+            echo "::warning::This is a custom warning."
+            echo "::warning title=Hey::This is a custom warning with title."
+            echo "::warning file=tests/Test1.cpp,line=10,endLine=20,title=Toto::Big warning!"
+
+        #
+        # Generate Error anotations
+        #
+        - name: Generate Error
+          run: |
+            echo "::error::This is a custom error."
+            echo "::error title=Hey::This is a custom error with title."
+
+        #
+        # Generate notice anotations
+        #
         - name: Generate Notices
           run: |
             echo "::notice::This is a custom notice."
