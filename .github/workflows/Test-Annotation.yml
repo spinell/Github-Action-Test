@@ -16,6 +16,7 @@ jobs:
           run: |
             echo "::warning::This is a custom warning."
             echo "::warning title=Hey::This is a custom warning with title."
+            echo "::warning file=tests/Test1.cpp,line=10,endLine=20,title=Toto::Big warning!"
 
         - name: Generate Error
           run: |
