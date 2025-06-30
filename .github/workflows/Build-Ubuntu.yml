@@ -6,8 +6,9 @@
 ################################################################################
 name: Build-Ubuntu
 
-on: [workflow_dispatch]
-
+on:
+  - workflow_dispatch
+  - pull_request
 
 jobs:
   build:
@@ -64,7 +65,10 @@ jobs:
       # Build the code
       #
       - name: Running cmake build ...
-        run: cmake --build ./build
+        run: |
+          echo "::add-matcher::problemMatcher/gcc_matcher.json"
+          cmake --build ./build
+          echo "::remove-matcher owner=gcc-problem-matcher::"
       #
       # Run the test
       #
