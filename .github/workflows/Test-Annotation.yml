@@ -8,7 +8,7 @@ name: Test-Annotation
 on: workflow_dispatch
 
 jobs:
-  GenerateAnnotation1:
+  job_generate_annotation_1:
     name: GenerateAnnotation1
     runs-on: ubuntu-24.04
     steps:
@@ -37,8 +37,8 @@ jobs:
             echo "::notice::This is a custom notice."
             echo "::notice title=Hey::This is a custom notice with title."
 
-  GenerateAnnotation2:
-    name: GenerateAnnotation1
+  job_generate_annotation_2:
+    name: GenerateAnnotation2
     runs-on: ubuntu-24.04
     steps:
         #
