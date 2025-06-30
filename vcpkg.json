@@ -1,6 +1,9 @@
 {
   "dependencies": [
     "gtest",
+    "sdl2",
+    "lua",
+    "entt",
     "spdlog"
   ]
 }
