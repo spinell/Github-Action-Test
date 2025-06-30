@@ -37,6 +37,11 @@ jobs:
             echo "npx   path        : $(which npx )"
             echo "npx   version     : $(npx  --version)"
 
+      - name: Install Dependencies
+        run: |
+          # Required to build SDL ?
+          sudo apt-get install libltdl-dev
+
       # Clone the repo
       - name: Check out repository code
         uses: actions/checkout@v4
