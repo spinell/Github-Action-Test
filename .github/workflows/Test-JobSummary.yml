@@ -1,0 +1,63 @@
+###############################################################
+# Workflow to test job summary
+#
+# https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions
+#
+###############################################################
+name: Test-JobSummary
+on: workflow_dispatch
+
+jobs:
+  job_1:
+    name: GenerateSummary1
+    runs-on: ubuntu-24.04
+    steps:
+        #
+        # Generate a summary
+        #
+        - name: Generate Summary Step 1
+          run: |
+            echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
+            echo "- Lets add a bullet point" >> $GITHUB_STEP_SUMMARY
+            echo "- Lets add a second bullet point" >> $GITHUB_STEP_SUMMARY
+            echo "- How about a third one?" >> $GITHUB_STEP_SUMMARY
+
+        #
+        # Append runner info to the job summary generated in previous step
+        #
+        - name: Add runner info to job summary
+          run: |
+            echo "## Runner info" >> $GITHUB_STEP_SUMMARY
+            echo "| Property   | Value |" >> $GITHUB_STEP_SUMMARY
+            echo "| :----      | :------: |" >> $GITHUB_STEP_SUMMARY
+            echo "| name       | ${{runner.name}} |" >> $GITHUB_STEP_SUMMARY
+            echo "| os         | ${{runner.os}}   |" >> $GITHUB_STEP_SUMMARY
+            echo "| arch       | ${{runner.arch}} |" >> $GITHUB_STEP_SUMMARY
+            echo "| temp       | ${{runner.temp}} |" >> $GITHUB_STEP_SUMMARY
+            echo "| tool_cache | ${{runner.tool_cache}} |" >> $GITHUB_STEP_SUMMARY
+
+  job_2:
+    name: GenerateSummary2
+    runs-on: ubuntu-24.04
+    steps:
+        - name: Add info to job summary
+          run: |
+            cmake_version=$(cmake --version | head --lines=1 | cut -c15-)
+            gcc_version=$(gcc --version | head --lines=1)
+            clang_version=$(clang --version | head --lines=1)
+
+            echo "### Info                              " >> $GITHUB_STEP_SUMMARY
+            echo "| Property      | Value              |" >> $GITHUB_STEP_SUMMARY
+            echo "| :----         | :------:           |" >> $GITHUB_STEP_SUMMARY
+            echo "| Home          | $HOME              |" >> $GITHUB_STEP_SUMMARY
+            echo "| PWD           | $(pwd)             |" >> $GITHUB_STEP_SUMMARY
+            echo "| Path          | $PATH              |" >> $GITHUB_STEP_SUMMARY
+            echo "| CMake         | $(which cmake)     |" >> $GITHUB_STEP_SUMMARY
+            echo "| CMake version | $cmake_version     |" >> $GITHUB_STEP_SUMMARY
+            echo "| Ninja         | $(which ninja)     |" >> $GITHUB_STEP_SUMMARY
+            echo "| Ninja version | $(ninja --version) |" >> $GITHUB_STEP_SUMMARY
+            echo "| Gcc           | $(which gcc)       |" >> $GITHUB_STEP_SUMMARY
+            echo "| Gcc   version | $gcc_version       |" >> $GITHUB_STEP_SUMMARY
+            echo "| clang         | $(which clang)     |" >> $GITHUB_STEP_SUMMARY
+            echo "| clang version | $clang_version     |" >> $GITHUB_STEP_SUMMARY
