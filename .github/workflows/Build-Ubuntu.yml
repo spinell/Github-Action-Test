@@ -18,16 +18,22 @@ jobs:
         run: |
             echo "Workind directory : $(pwd)"
             echo "Home              : $HOME"
+
             echo "cmake path        : $(which cmake)"
             echo "cmake version     : $(cmake --version)"
-            echo "cmake path        : $(which cmake)"
-            echo "cmake version     : $(cmake --version)"
+
+            echo "ninja path        : $(which ninja)"
+            echo "ninja version     : $(ninja --version)"
+
             echo "gcc path          : $(which gcc)"
             echo "gcc version       : $(gcc --version)"
+
             echo "clang path        : $(which clang)"
             echo "clang version     : $(clang --version)"
+
             echo "npm   path        : $(which npm)"
             echo "npm   version     : $(npm --version)"
+
             echo "npx   path        : $(which npx )"
             echo "npx   version     : $(npx  --version)"
 
