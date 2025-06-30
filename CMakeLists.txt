@@ -82,6 +82,16 @@ message(STATUS "Found spdlog in ${spdlog_DIR}")
 
 find_package(unofficial-lua REQUIRED CONFIG)
 
+add_compile_options(
+    # MSVC (cl.exe / clang-cl.exe)
+    $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:/W4>
+    $<$<CXX_COMPILER_FRONTEND_VARIANT:MSVC>:/Wall>
+    # gcc / clang
+    $<$<CXX_COMPILER_ID:Clang,GNU>:-Wall>
+    $<$<CXX_COMPILER_ID:Clang,GNU>:-Wextra>
+)
+
+
 add_subdirectory(App)
 
 #target_link_libraries(main PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static> )

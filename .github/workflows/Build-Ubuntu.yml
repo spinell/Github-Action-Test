@@ -1,0 +1,86 @@
+################################################################################
+#   Build the code onlinux with GCC 14
+#   Run the tests
+#   Install
+#   Upload artifact
+################################################################################
+name: Build-Ubuntu
+
+on: [workflow_dispatch]
+
+
+jobs:
+  build:
+    name: BuildTestInstall
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Dump Init state
+        run: |
+            echo "Workind directory : $(pwd)"
+            echo "Home              : $HOME"
+
+            echo cmake path        : $(which cmake)
+            echo cmake version     : $(cmake --version)
+
+            echo ninja path        : $(which ninja)
+            echo ninja version     : $(ninja --version)
+
+            echo gcc path          : $(which gcc)
+            echo gcc version       : $(gcc --version)
+
+            echo clang path        : $(which clang)
+            echo clang version     : $(clang --version)
+
+            echo npm   path        : $(which npm)
+            echo npm   version     : $(npm --version)
+
+            echo npx   path        : $(which npx )
+            echo npx   version     : $(npx  --version)
+
+      - name: Install Dependencies
+        run: |
+          # Required to build SDL ?
+          sudo apt-get install libltdl-dev
+
+      # Clone the repo
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      #
+      # Run cmake configure
+      #
+      - name: Running cmake configure ...
+        env:
+          CC: "gcc-14"
+          CXX: "g++-14"
+        run: |
+            cmake \
+                -B ./build \
+                -G Ninja \
+                -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
+                -DCMAKE_BUILD_TYPE=Debug
+
+      #
+      # Build the code
+      #
+      - name: Running cmake build ...
+        run: cmake --build ./build
+      #
+      # Run the test
+      #
+      - name: Running tests ...
+        run: ctest --test-dir ./build
+      #
+      # Install
+      #
+      - name: Running cmake install ...
+        run: cmake --install ./build --prefix ./install
+      #
+      # Upload artifact
+      #
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-ubuntu
+          path: ./install
+
+      - run: echo "This job's status is ${{ job.status }}."
