@@ -15,11 +15,14 @@ jobs:
         - name: Generate Warning
           run: |
             echo "::warning::This is a custom warning."
+            echo "::warning title=Hey::This is a custom warning with title."
 
         - name: Generate Error
           run: |
             echo "::error::This is a custom error."
+            echo "::error title=Hey::This is a custom error with title."
 
         - name: Generate Notices
           run: |
-            echo "::notice ::This is a custom notice."
+            echo "::notice::This is a custom notice."
+            echo "::notice title=Hey::This is a custom notice with title."
