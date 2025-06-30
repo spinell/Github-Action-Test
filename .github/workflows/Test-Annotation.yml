@@ -1,0 +1,25 @@
+###############################################################
+# Workflow to test annotation (notice, warning, error)
+#
+# https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions
+#
+###############################################################
+name: Test-Annotation
+on: workflow_dispatch
+
+jobs:
+  GenerateAnnotation:
+    name: GenerateAnnotation
+    runs-on: ubuntu-24.04
+    steps:
+        - name: Generate Warning
+          run: |
+            echo "::warning::This is a custom warning."
+
+        - name: Generate Error
+          run: |
+            echo "::error::This is a custom error."
+
+        - name: Generate Notices
+          run: |
+            echo "::notice ::This is a custom notice."
