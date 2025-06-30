@@ -5,7 +5,9 @@
 #
 ###############################################################
 name: Test-Annotation
-on: workflow_dispatch
+on:
+  - workflow_dispatch
+  - pull_request
 
 jobs:
   job_generate_annotation_1:
