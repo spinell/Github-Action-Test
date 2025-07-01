@@ -6,12 +6,18 @@
 ################################################################################
 name: Build-Ubuntu
 
-on: [workflow_dispatch]
-
+on:
+  push:
+    branches:
+      - test_push
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
-    name: BuildTestInstall
+  build-gcc:
+    name: BuildTestInstall-GCC
     runs-on: ubuntu-24.04
     steps:
       - name: Dump Init state
@@ -54,7 +60,8 @@ jobs:
           CC: "gcc-14"
           CXX: "g++-14"
         run: |
-            cmake \
+          echo "::add-matcher::.github/workflows/problemMatcher/cmake.json"
+          cmake \
                 -B ./build \
                 -G Ninja \
                 -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
@@ -64,7 +71,10 @@ jobs:
       # Build the code
       #
       - name: Running cmake build ...
-        run: cmake --build ./build
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/gcc_matcher.json"
+          cmake --build ./build
+          echo "::remove-matcher owner=gcc::"
       #
       # Run the test
       #
@@ -81,6 +91,515 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: install-ubuntu
+          path: ./install
+
+      - run: echo "This job's status is ${{ job.status }}."
+
+  build-clang:
+    name: BuildTestInstall-Clang
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Dump Init state
+        run: |
+            echo "Workind directory : $(pwd)"
+            echo "Home              : $HOME"
+
+            echo cmake path        : $(which cmake)
+            echo cmake version     : $(cmake --version)
+
+            echo ninja path        : $(which ninja)
+            echo ninja version     : $(ninja --version)
+
+            echo gcc path          : $(which gcc)
+            echo gcc version       : $(gcc --version)
+
+            echo clang path        : $(which clang)
+            echo clang version     : $(clang --version)
+
+            echo npm   path        : $(which npm)
+            echo npm   version     : $(npm --version)
+
+            echo npx   path        : $(which npx )
+            echo npx   version     : $(npx  --version)
+
+      - name: Install Dependencies
+        run: |
+          # Required to build SDL ?
+          sudo apt-get install libltdl-dev
+
+      # Clone the repo
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      #
+      # Run cmake configure
+      #
+      - name: Running cmake configure ...
+        env:
+          CC: "clang-18"
+          CXX: "clang++-18"
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/cmake.json"
+          cmake \
+                -B ./build \
+                -G Ninja \
+                -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
+                -DCMAKE_BUILD_TYPE=Debug
+
+      #
+      # Build the code
+      #
+      - name: Running cmake build ...
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/gcc_matcher.json"
+          cmake --build ./build
+          echo "::remove-matcher owner=gcc-problem-matcher::"
+      #
+      # Run the test
+      #
+      - name: Running tests ...
+        run: ctest --test-dir ./build
+      #
+      # Install
+      #
+      - name: Running cmake install ...
+        run: cmake --install ./build --prefix ./install
+      #
+      # Upload artifact
+      #
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-ubuntu-clang
+          path: ./install
+
+      - run: echo "This job's status is ${{ job.status }}."
+
+  build-msvc-classic:
+    name: BuildTestInstall-msvc-classic
+    runs-on: windows-2022
+    steps:
+      #
+      # setup msvc shell
+      #
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Dump Init state
+        shell: bash
+        run: |
+            echo "Workind directory : $(pwd)"
+            echo "Home              : $HOME"
+
+            echo cmake path        : $(which cmake)
+            echo cmake version     : $(cmake --version)
+
+            echo ninja path        : $(which ninja)
+            echo ninja version     : $(ninja --version)
+
+            echo gcc path          : $(which gcc)
+            echo gcc version       : $(gcc --version)
+
+            echo clang path        : $(which clang)
+            echo clang version     : $(clang --version)
+
+            echo npm   path        : $(which npm)
+            echo npm   version     : $(npm --version)
+
+            echo npx   path        : $(which npx )
+            echo npx   version     : $(npx  --version)
+
+      # Clone the repo
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      #
+      # Run cmake configure
+      #
+      - name: Running cmake configure ...
+        env:
+          CC: "cl"
+          CXX: "cl"
+          CFLAGS: "/diagnostics:classic"
+          CXXFLAGS: "/diagnostics:classic"
+        shell: bash
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/cmake.json"
+          cmake \
+                -B ./build \
+                -G Ninja \
+                -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
+                -DCMAKE_BUILD_TYPE=Debug
+
+      #
+      # Build the code
+      #
+      - name: Build (msvc-classic)
+        shell: bash
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/msvc-classic.json"
+          cmake --build ./build --clean-first
+          echo "::remove-matcher owner=msvc-classic::"
+
+      #
+      # Run the test
+      #
+      - name: Running tests ...
+        shell: bash
+        run: ctest --test-dir ./build
+      #
+      # Install
+      #
+      - name: Running cmake install ...
+        shell: bash
+        run: cmake --install ./build --prefix ./install
+      #
+      # Upload artifact
+      #
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-windows-msvc
+          path: ./install
+        if: false
+
+      - run: echo "This job's status is ${{ job.status }}."
+
+  build-msvc-column:
+    name: BuildTestInstall-msvc-column
+    runs-on: windows-2022
+    steps:
+      #
+      # setup msvc shell
+      #
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Dump Init state
+        shell: bash
+        run: |
+            echo "Workind directory : $(pwd)"
+            echo "Home              : $HOME"
+
+            echo cmake path        : $(which cmake)
+            echo cmake version     : $(cmake --version)
+
+            echo ninja path        : $(which ninja)
+            echo ninja version     : $(ninja --version)
+
+            echo gcc path          : $(which gcc)
+            echo gcc version       : $(gcc --version)
+
+            echo clang path        : $(which clang)
+            echo clang version     : $(clang --version)
+
+            echo npm   path        : $(which npm)
+            echo npm   version     : $(npm --version)
+
+            echo npx   path        : $(which npx )
+            echo npx   version     : $(npx  --version)
+
+      # Clone the repo
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      #
+      # Run cmake configure
+      #
+      - name: Running cmake configure ...
+        env:
+          CC: "cl"
+          CXX: "cl"
+          CFLAGS: "/diagnostics:column"
+          CXXFLAGS: "/diagnostics:column"
+        shell: bash
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/cmake.json"
+          cmake \
+                -B ./build \
+                -G Ninja \
+                -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
+                -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build (msvc-column)
+        shell: bash
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/msvc-column.json"
+          cmake --build ./build --clean-first
+          echo "::remove-matcher owner=msvc-column ::"
+
+      #
+      # Run the test
+      #
+      - name: Running tests ...
+        shell: bash
+        run: ctest --test-dir ./build
+      #
+      # Install
+      #
+      - name: Running cmake install ...
+        shell: bash
+        run: cmake --install ./build --prefix ./install
+      #
+      # Upload artifact
+      #
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-windows-msvc
+          path: ./install
+        if: false
+
+      - run: echo "This job's status is ${{ job.status }}."
+
+  build-msvc-caret:
+    name: BuildTestInstall-msvc-caret
+    runs-on: windows-2022
+    steps:
+      #
+      # setup msvc shell
+      #
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Dump Init state
+        shell: bash
+        run: |
+            echo "Workind directory : $(pwd)"
+            echo "Home              : $HOME"
+
+            echo cmake path        : $(which cmake)
+            echo cmake version     : $(cmake --version)
+
+            echo ninja path        : $(which ninja)
+            echo ninja version     : $(ninja --version)
+
+            echo gcc path          : $(which gcc)
+            echo gcc version       : $(gcc --version)
+
+            echo clang path        : $(which clang)
+            echo clang version     : $(clang --version)
+
+            echo npm   path        : $(which npm)
+            echo npm   version     : $(npm --version)
+
+            echo npx   path        : $(which npx )
+            echo npx   version     : $(npx  --version)
+
+      # Clone the repo
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      #
+      # Run cmake configure
+      #
+      - uses: ammaraskar/msvc-problem-matcher@master
+      - name: Running cmake configure ...
+        env:
+          CC: "cl"
+          CXX: "cl"
+          CFLAGS: "/diagnostics:caret"
+          CXXFLAGS: "/diagnostics:caret"
+        shell: bash
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/cmake.json"
+          cmake \
+                -B ./build \
+                -G Ninja \
+                -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
+                -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build (msvc-caret)
+        shell: bash
+        run: |
+          #echo "::add-matcher::.github/workflows/problemMatcher/msvc-column.json"
+          cmake --build ./build --clean-first
+          #echo "::remove-matcher owner=msvc-column ::"
+
+      #
+      # Run the test
+      #
+      - name: Running tests ...
+        shell: bash
+        run: ctest --test-dir ./build
+      #
+      # Install
+      #
+      - name: Running cmake install ...
+        shell: bash
+        run: cmake --install ./build --prefix ./install
+      #
+      # Upload artifact
+      #
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-windows-msvc
+          path: ./install
+        if: false
+
+      - run: echo "This job's status is ${{ job.status }}."
+
+
+
+  build-msvc-clang:
+    name: BuildTestInstall-msvc-clang
+    runs-on: windows-2022
+    steps:
+      #
+      # setup msvc shell
+      #
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Dump Init state
+        shell: bash
+        run: |
+            echo "Workind directory : $(pwd)"
+            echo "Home              : $HOME"
+
+            echo cmake path        : $(which cmake)
+            echo cmake version     : $(cmake --version)
+
+            echo ninja path        : $(which ninja)
+            echo ninja version     : $(ninja --version)
+
+            echo gcc path          : $(which gcc)
+            echo gcc version       : $(gcc --version)
+
+            echo clang path        : $(which clang)
+            echo clang version     : $(clang --version)
+
+            echo npm   path        : $(which npm)
+            echo npm   version     : $(npm --version)
+
+            echo npx   path        : $(which npx )
+            echo npx   version     : $(npx  --version)
+
+      # Clone the repo
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      #
+      # Run cmake configure
+      #
+      - name: Running cmake configure ...
+        env:
+          CC: "clang"
+          CXX: "clang"
+        shell: bash
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/cmake.json"
+          cmake \
+                -B ./build \
+                -G Ninja \
+                -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
+                -DCMAKE_BUILD_TYPE=Debug
+
+      #
+      # Build the code
+      #
+      - name: Running cmake build ...
+        shell: bash
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/gcc_matcher.json"
+          cmake --build ./build
+          echo "::remove-matcher owner=gcc-problem-matcher::"
+      #
+      # Run the test
+      #
+      - name: Running tests ...
+        shell: bash
+        run: ctest --test-dir ./build
+      #
+      # Install
+      #
+      - name: Running cmake install ...
+        shell: bash
+        run: cmake --install ./build --prefix ./install
+      #
+      # Upload artifact
+      #
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-windows-msvc-clang
+          path: ./install
+
+      - run: echo "This job's status is ${{ job.status }}."
+
+  build-msvc-clang-cl:
+    name: BuildTestInstall-msvc-clang-cl
+    runs-on: windows-2022
+    steps:
+      #
+      # setup msvc shell
+      #
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Dump Init state
+        shell: bash
+        run: |
+            echo "Workind directory : $(pwd)"
+            echo "Home              : $HOME"
+
+            echo cmake path        : $(which cmake)
+            echo cmake version     : $(cmake --version)
+
+            echo ninja path        : $(which ninja)
+            echo ninja version     : $(ninja --version)
+
+            echo gcc path          : $(which gcc)
+            echo gcc version       : $(gcc --version)
+
+            echo clang path        : $(which clang)
+            echo clang version     : $(clang --version)
+
+            echo npm   path        : $(which npm)
+            echo npm   version     : $(npm --version)
+
+            echo npx   path        : $(which npx )
+            echo npx   version     : $(npx  --version)
+
+      # Clone the repo
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      #
+      # Run cmake configure
+      #
+      - name: Running cmake configure ...
+        env:
+          CC: "clang-cl"
+          CXX: "clang-cl"
+        shell: bash
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/cmake.json"
+          cmake \
+                -B ./build \
+                -G Ninja \
+                -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
+                -DCMAKE_BUILD_TYPE=Debug
+
+      #
+      # Build the code
+      #
+      - name: Running cmake build ...
+        shell: bash
+        run: |
+          echo "::add-matcher::.github/workflows/problemMatcher/msvc-clang-cl.json"
+          cmake --build ./build --clean-first
+          echo "::remove-matcher owner=msvc-clang-cl ::"
+
+      #
+      # Run the test
+      #
+      - name: Running tests ...
+        shell: bash
+        run: ctest --test-dir ./build
+      #
+      # Install
+      #
+      - name: Running cmake install ...
+        shell: bash
+        run: cmake --install ./build --prefix ./install
+      #
+      # Upload artifact
+      #
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-windows-msvc-clang-cl
           path: ./install
 
       - run: echo "This job's status is ${{ job.status }}."

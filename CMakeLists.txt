@@ -63,8 +63,6 @@ cmake_print_variables(MINGW)      # compiler targeting the GNU ABI on Windows
 cmake_print_variables(MSYS)       # MSYS Makefiles generator
 cmake_print_variables(CMAKE_INCLUDE_SYSTEM_FLAG_CXX)
 
-
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS Off)
