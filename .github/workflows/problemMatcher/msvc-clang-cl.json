@@ -1,0 +1,18 @@
+{
+    "problemMatcher": [
+        {
+            "owner": "msvc-clang-cl",
+            "pattern": [
+                {
+                    "regexp": "^(?:\\s+\\d+\\>)?([^\\s].*)\\((\\d+),?(\\d+)?(?:,\\d+,\\d+)?\\)\\s*:\\s+(error|warning|info):\\s*(.*)(\\[.*\\])$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5,
+                    "code": 6
+                }
+            ]
+        }
+    ]
+}
