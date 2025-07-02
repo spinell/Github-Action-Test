@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 jobs:
   try_cache:
-    runs-on: unbuntu-2024.04
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Check Cache
