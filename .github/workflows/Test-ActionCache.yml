@@ -1,0 +1,22 @@
+name: Test-ActionCache
+on: workflow_dispatch
+
+jobs:
+  try_cache:
+    runs-on: unbuntu-2024.04
+
+    steps:
+    - name: Check Cache
+      id: cache-primes
+      uses: actions/cache@v4
+      with:
+        path: ~/file.txt
+        key: ${{ runner.os }}-file
+
+    - name: Generate file
+      if: steps.cache-primes.outputs.cache-hit != 'true'
+      run: |
+        echo "Helo world" >> ~/file.txt
+
+    - name: Display file content
+      run: cat ~/file.txt
