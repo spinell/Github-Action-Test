@@ -6,10 +6,15 @@
 ################################################################################
 name: Build-Ubuntu
 
+env:
+  USERNAME: spinell
+  FEED_URL: https://nuget.pkg.github.com/spinell/index.json
+  VCPKG_BINARY_SOURCES: "clear;nuget,https://nuget.pkg.github.com/spinell/index.json,readwrite"
+
 on:
   push:
     branches:
-      - test_push
+      - main
   workflow_dispatch:
   pull_request:
     branches:
@@ -47,6 +52,26 @@ jobs:
         run: |
           # Required to build SDL ?
           sudo apt-get install libltdl-dev
+
+          # required to run nuget
+          sudo apt install mono-complete
+
+      - name: Add NuGet sources
+        shell: bash
+        run: |
+          VCPKG_EXE=$VCPKG_INSTALLATION_ROOT/vcpkg
+
+          mono `$VCPKG_EXE fetch nuget | tail -n 1` \
+            sources add \
+            -Source "${{ env.FEED_URL }}" \
+            -StorePasswordInClearText \
+            -Name GitHubPackages \
+            -UserName "${{ env.USERNAME }}" \
+            -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+
+          mono `$VCPKG_EXE fetch nuget | tail -n 1` \
+            setapikey "${{ secrets.GH_PACKAGES_TOKEN }}" \
+            -Source "${{ env.FEED_URL }}"
 
       # Clone the repo
       - name: Check out repository code
@@ -127,6 +152,26 @@ jobs:
           # Required to build SDL ?
           sudo apt-get install libltdl-dev
 
+          # required to run nuget
+          sudo apt install mono-complete
+
+      - name: Add NuGet sources
+        shell: bash
+        run: |
+          VCPKG_EXE=$VCPKG_INSTALLATION_ROOT/vcpkg
+
+          mono `$VCPKG_EXE fetch nuget | tail -n 1` \
+            sources add \
+            -Source "${{ env.FEED_URL }}" \
+            -StorePasswordInClearText \
+            -Name GitHubPackages \
+            -UserName "${{ env.USERNAME }}" \
+            -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+
+          mono `$VCPKG_EXE fetch nuget | tail -n 1` \
+            setapikey "${{ secrets.GH_PACKAGES_TOKEN }}" \
+            -Source "${{ env.FEED_URL }}"
+
       # Clone the repo
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -178,6 +223,20 @@ jobs:
     name: BuildTestInstall-msvc-classic
     runs-on: windows-2022
     steps:
+      - name: Add NuGet sources
+        shell: pwsh
+        run: |
+          .$(vcpkg fetch nuget) `
+            sources add `
+            -Source "${{ env.FEED_URL }}" `
+            -StorePasswordInClearText `
+            -Name GitHubPackages `
+            -UserName "${{ env.USERNAME }}" `
+            -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+          .$(vcpkg fetch nuget) `
+            setapikey "${{ secrets.GH_PACKAGES_TOKEN }}" `
+            -Source "${{ env.FEED_URL }}"
+
       #
       # setup msvc shell
       #
@@ -266,6 +325,20 @@ jobs:
     name: BuildTestInstall-msvc-column
     runs-on: windows-2022
     steps:
+      - name: Add NuGet sources
+        shell: pwsh
+        run: |
+          .$(vcpkg fetch nuget) `
+            sources add `
+            -Source "${{ env.FEED_URL }}" `
+            -StorePasswordInClearText `
+            -Name GitHubPackages `
+            -UserName "${{ env.USERNAME }}" `
+            -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+          .$(vcpkg fetch nuget) `
+            setapikey "${{ secrets.GH_PACKAGES_TOKEN }}" `
+            -Source "${{ env.FEED_URL }}"
+
       #
       # setup msvc shell
       #
@@ -351,6 +424,21 @@ jobs:
     name: BuildTestInstall-msvc-caret
     runs-on: windows-2022
     steps:
+      - name: Add NuGet sources
+        shell: pwsh
+        run: |
+          $vcpkg_exe="$VCPKG_INSTALLATION_ROOT/vcpkg"
+          .$(vcpkg fetch nuget) `
+            sources add `
+            -Source "${{ env.FEED_URL }}" `
+            -StorePasswordInClearText `
+            -Name GitHubPackages `
+            -UserName "${{ env.USERNAME }}" `
+            -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+          .$(vcpkg fetch nuget) `
+            setapikey "${{ secrets.GH_PACKAGES_TOKEN }}" `
+            -Source "${{ env.FEED_URL }}"
+
       #
       # setup msvc shell
       #
@@ -433,12 +521,24 @@ jobs:
 
       - run: echo "This job's status is ${{ job.status }}."
 
-
-
   build-msvc-clang:
     name: BuildTestInstall-msvc-clang
     runs-on: windows-2022
     steps:
+      - name: Add NuGet sources
+        shell: pwsh
+        run: |
+          .$(vcpkg fetch nuget) `
+            sources add `
+            -Source "${{ env.FEED_URL }}" `
+            -StorePasswordInClearText `
+            -Name GitHubPackages `
+            -UserName "${{ env.USERNAME }}" `
+            -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+          .$(vcpkg fetch nuget) `
+            setapikey "${{ secrets.GH_PACKAGES_TOKEN }}" `
+            -Source "${{ env.FEED_URL }}"
+
       #
       # setup msvc shell
       #
@@ -523,6 +623,20 @@ jobs:
     name: BuildTestInstall-msvc-clang-cl
     runs-on: windows-2022
     steps:
+      - name: Add NuGet sources
+        shell: pwsh
+        run: |
+          .$(vcpkg fetch nuget) `
+            sources add `
+            -Source "${{ env.FEED_URL }}" `
+            -StorePasswordInClearText `
+            -Name GitHubPackages `
+            -UserName "${{ env.USERNAME }}" `
+            -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+          .$(vcpkg fetch nuget) `
+            setapikey "${{ secrets.GH_PACKAGES_TOKEN }}" `
+            -Source "${{ env.FEED_URL }}"
+
       #
       # setup msvc shell
       #
