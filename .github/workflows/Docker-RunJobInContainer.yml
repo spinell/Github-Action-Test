@@ -44,12 +44,12 @@ jobs:
 
       - name: Dump env context
         run: |
-          echo ${{ toJSON(env) }}
+          echo "${{ toJSON(env) }}"
 
       - name: Dump vars context
         run: |
-          echo ${{ toJSON(vars) }}
+          echo "${{ toJSON(vars) }}"
 
       - name: Dump secrets context
         run: |
-          echo ${{ toJSON(secrets) }}
+          echo "${{ toJSON(secrets) }}"
