@@ -1,7 +1,7 @@
 #
 # Workflow example that run command in a docker container.
 # Thie image will be doanloaded from a registry.
-name: Docker-UseImage
+name: Docker-ContainerAction
 
 on:
   # enable a workflow to be triggered manually
