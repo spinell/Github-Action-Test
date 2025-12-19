@@ -19,22 +19,13 @@ on:
 jobs:
   docker_build_and_push:
     runs-on: ubuntu-24.04
-    name: A job that build a docker image
-
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
+    name: BuildAndPublishImage
 
     steps:
       # Clone the repo
       # This is required to use the custom action in this repo.
       - name: Cloning git repo
         uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
 
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
