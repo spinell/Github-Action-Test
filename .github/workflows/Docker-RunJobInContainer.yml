@@ -54,7 +54,7 @@ jobs:
         run: |
           echo "${{ toJSON(secrets) }}"
 
-   use-image-from-github:
+  use-image-from-github:
       runs-on: ghcr.io/spinell/rocky:latest
 
       # define the docker container to use
