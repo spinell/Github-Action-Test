@@ -58,7 +58,7 @@ jobs:
   # Github will not link the image with the repo.
   # Which means:
   #  - Other Workflow in the repo can't acces the image with the GITHUB_TOKEN.
-  #  - The package will have the same visibility of this repo.
+  #  - The package will private.
   #
   docker_build_and_push_with_github_pat:
     runs-on: ubuntu-24.04
@@ -91,7 +91,7 @@ jobs:
   # Github will not automaticly link the image with the repo but the job
   # will use the label "org.opencontainers.image.sourc" to link the image.
   #  - Other Workflow in the repo can acces the image with the GITHUB_TOKEN.
-  #  - The package will have the same visibility of this repo.
+  #  - The package will private.
   #
   docker_build_and_push_with_github_pat_and_manual_link:
     runs-on: ubuntu-24.04
