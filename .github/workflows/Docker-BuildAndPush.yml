@@ -1,6 +1,8 @@
 #
 # Workflow that use docker command to build a image and push the image on github
 #
+# Ref : https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry
+#
 name: Docker-BuildAndPush
 description: Build a docker image from a docker file and push the image on github.
 
@@ -9,20 +11,23 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  # enable a workflow to be triggered manually
   workflow_dispatch:
-  # trigger on push
   push:
       paths:
         - .github/workflows/Docker-BuildAndPush.yml
 
 jobs:
-  docker_build_and_push:
+  #
+  # This job use the GITHUB_TOKEN to publish the docker image.
+  # Github will automaticly link the image with the repo.
+  # Which means other Workflow in the repo can acces the image.
+  #
+  # Note: This workflow required write access on Github packages because it's use GITHUB_TOKEN.
+  #
+  docker_build_and_push_with_github_token:
     runs-on: ubuntu-24.04
     name: BuildAndPublishImage
     permissions:
-       # This is required to Grant write access on Github packages on the
-       # GITHUB_TOKEN.
       packages: write
 
     steps:
@@ -33,6 +38,35 @@ jobs:
 
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # Build a docker image form a docker file.
+      - name: Build Image from docker file
+        run : |
+          docker build \
+            --file ./docker/rocky.dockerfile \
+            --tag ghcr.io/spinell/rocky:latest .
+
+      # Publish the docker image on github
+      # This will create the package with the same visibility of the repo.
+      - name: Push Image
+        run : docker push ghcr.io/spinell/rocky:latest
+
+  #
+  # This job use a PAT (Personal access token) to publish the docker image.
+  # Github will not link the image with the repo.
+  # Which means other Workflow in the repo can't acces the image with the GITHUB_TOKEN.
+  #
+  docker_build_and_push_with_github_pat:
+    runs-on: ubuntu-24.04
+    name: BuildAndPublishImage
+    steps:
+      # Clone the repo
+      # This is required to use the custom action in this repo.
+      - name: Cloning git repo
+        uses: actions/checkout@v4
+
+      - name: Log in to registry
+        run: echo "${{ secrets.PAT_PACKAGE_READ_WIRTE }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       # Build a docker image form a docker file.
       - name: Build Image from docker file
