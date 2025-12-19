@@ -1,8 +1,20 @@
-# Workflow example build a docker image and push it
+#
+# Workflow that use docker command to build a image and push the image on github
+#
 name: Docker-BuildAndPush
+description: Build a docker image from a docker file and push the image on github.
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
+  # enable a workflow to be triggered manually
   workflow_dispatch:
+  # trigger on push
+  push:
+      paths:
+        - .github/workflows/Docker-BuildAndPush.yml
 
 jobs:
   docker_build_and_push:
@@ -27,8 +39,13 @@ jobs:
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build Image
-        run : docker build --file ./docker/rocky.dockerfile --tag ghcr.io/spinell/rocky:latest .
+      # Build a docker image form a docker file.
+      - name: Build Image from docker file
+        run : |
+          docker build \
+            --file ./docker/rocky.dockerfile \
+            --tag ghcr.io/spinell/rocky:latest .
 
+      # Publish the docker image on github
       - name: Push Image
         run : docker push ghcr.io/spinell/rocky:latest
