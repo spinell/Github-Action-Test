@@ -62,6 +62,9 @@ jobs:
       # for those who declaire a container to use
       container:
         image: rockylinux:9.3
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.github_token }}
         env:
           MY_CONTAINER_ENV_1: Value1
           MY_CONTAINER_ENV_2: Value2
