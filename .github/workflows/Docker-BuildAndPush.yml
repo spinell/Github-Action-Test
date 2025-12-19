@@ -42,5 +42,6 @@ jobs:
             --tag ghcr.io/spinell/rocky:latest .
 
       # Publish the docker image on github
+      # This will create a public package because the repo is public.
       - name: Push Image
         run : docker push ghcr.io/spinell/rocky:latest
