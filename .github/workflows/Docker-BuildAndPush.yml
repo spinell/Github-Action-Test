@@ -20,6 +20,10 @@ jobs:
   docker_build_and_push:
     runs-on: ubuntu-24.04
     name: BuildAndPublishImage
+    permissions:
+       # This is required to Grant write access on Github packages on the
+       # GITHUB_TOKEN.
+      packages: write
 
     steps:
       # Clone the repo
