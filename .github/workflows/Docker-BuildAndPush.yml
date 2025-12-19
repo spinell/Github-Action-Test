@@ -26,10 +26,11 @@ jobs:
   #
   docker_build_and_push_with_github_token:
     runs-on: ubuntu-24.04
-    name: BuildAndPublishImage
+    name: BuildAndPublishImageWithGitToken
     permissions:
       packages: write
-
+    env:
+      IMANGE_NAME: ghcr.io/spinell/rocky_auto_linked:latest
     steps:
       # Clone the repo
       # This is required to use the custom action in this repo.
@@ -44,12 +45,12 @@ jobs:
         run : |
           docker build \
             --file ./docker/rocky.dockerfile \
-            --tag ghcr.io/spinell/rocky:latest .
+            --tag $IMANGE_NAME .
 
       # Publish the docker image on github
       # This will create the package with the same visibility of the repo.
       - name: Push Image
-        run : docker push ghcr.io/spinell/rocky:latest
+        run : docker push $IMANGE_NAME
 
   #
   # This job use a PAT (Personal access token) to publish the docker image.
@@ -58,7 +59,9 @@ jobs:
   #
   docker_build_and_push_with_github_pat:
     runs-on: ubuntu-24.04
-    name: BuildAndPublishImage
+    name: BuildAndPublishImageWithPAT
+    env:
+      IMANGE_NAME: ghcr.io/spinell/rocky_not_linked:latest
     steps:
       # Clone the repo
       # This is required to use the custom action in this repo.
@@ -73,9 +76,9 @@ jobs:
         run : |
           docker build \
             --file ./docker/rocky.dockerfile \
-            --tag ghcr.io/spinell/rocky:latest .
+            --tag $IMANGE_NAME .
 
       # Publish the docker image on github
       # This will create the package with the same visibility of the repo.
       - name: Push Image
-        run : docker push ghcr.io/spinell/rocky:latest
+        run : docker push $IMANGE_NAME
